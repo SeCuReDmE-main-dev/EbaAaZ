@@ -1,13 +1,6 @@
 import type {Metadata} from 'next';
 import './globals.css';
-import { Source_Sans_Pro } from 'next/font/google';
 import Link from 'next/link';
-
-const sourceSansPro = Source_Sans_Pro({
-  weight: ['400', '700'],
-  subsets: ['latin'],
-  display: 'swap',
-});
 
 export const metadata: Metadata = {
   title: 'EbaAaZ - Firebase Studio App',
@@ -22,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={sourceSansPro.className}>
+      <body>
         <header className="header">
           <div className="header-menu">
             <Link href="/" style={{ margin: '0 10px' }}>Home</Link>
@@ -37,3 +30,4 @@ export default function RootLayout({
     </html>
   );
 }
+
