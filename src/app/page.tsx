@@ -79,7 +79,7 @@ const Home = () => {
   const handleFetchError = async () => {
     try {
       // Use the provided external server URL
-      const serverURL = "https://github.com/Celebrum/servers.git";
+      const serverURL = "https://github.com/modelcontextprotocol/servers.git";
       const response = await fetch(serverURL + '/api/non-existent-endpoint'); // Assuming the server has an API endpoint
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -97,7 +97,7 @@ const Home = () => {
 
   return (
     <div className="container mx-auto p-4 flex flex-col gap-4">
-      <h1 className="text-2xl font-bold" style={{color: '#FF8C00'}}>EbaAaZ - Core Features</h1>
+      <h1 className="text-2xl font-bold" style={{color: '#FF8C00'}}>EbaAaZ Hub</h1>
 
       {currentStep === 1 && (
         <Card>
@@ -281,5 +281,3 @@ const Home = () => {
 };
 
 export default Home;
-
-    
