@@ -45,18 +45,25 @@ const GithubMCPServerPage = () => {
       }
 
       const token = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
-      if (!token) {
-        setOpen(true);
+      if (token) {
+        setGithubToken(token);
+        try {
+          const hashed = await hashToken(token);
+          setHashedToken(hashed);
+          localStorage.setItem('githubToken', hashed);
+          setIsTokenSetup(true);
+        } catch (err) {
+          setError('Error hashing the token.');
+          console.error(err);
+        }
         return;
       }
 
-      setGithubToken(token);
-      localStorage.setItem('githubToken', token);
-      setIsTokenSetup(true);
+      setOpen(true);
     };
 
     loadToken();
-  }, []);
+  }, [hashToken]);
 
   const handleTokenSubmit = async () => {
     if (!tempToken) {
@@ -105,7 +112,10 @@ const GithubMCPServerPage = () => {
                 </a>
               </AlertDialogDescription>
             </AlertDialogHeader>
-            <AlertDialogFooter>
+            <AlertDialogFooter className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
+              <AlertDialogAction onClick={handleTokenSubmit}>
+                Submit Token
+              </AlertDialogAction>
               <div className="grid gap-2 w-full">
                 <Label htmlFor="token">GitHub Token</Label>
                 <Input
@@ -116,9 +126,6 @@ const GithubMCPServerPage = () => {
                   onChange={(e) => setTempToken(e.target.value)}
                 />
               </div>
-              <AlertDialogAction onClick={handleTokenSubmit}>
-                Submit Token
-              </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
