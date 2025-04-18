@@ -1,9 +1,34 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 
 const GithubMCPServerPage = () => {
+  const [githubToken, setGithubToken] = useState<string | undefined>(undefined);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Load GitHub token from environment variable
+    const token = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
+
+    if (!token) {
+      setError('GitHub Personal Access Token not found in environment variables.');
+      console.error('GitHub Personal Access Token not found in environment variables.');
+      return;
+    }
+
+    setGithubToken(token);
+  }, []);
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold" style={{ color: '#FF8C00' }}>GitHub MCP Server</h1>
+
+      {error && (
+        <div className="text-red-500">
+          Error: {error}
+        </div>
+      )}
+
       <p>
         The GitHub MCP Server is a Model Context Protocol (MCP) server that provides seamless integration with GitHub APIs, enabling advanced automation and interaction capabilities for developers and tools.
       </p>
@@ -53,7 +78,7 @@ const GithubMCPServerPage = () => {
           "ghcr.io/github/github-mcp-server"
         ],
         "env": {
-          "GITHUB_PERSONAL_ACCESS_TOKEN": "\${input:github_token}"
+          "GITHUB_PERSONAL_ACCESS_TOKEN": "${process.env.NEXT_PUBLIC_GITHUB_TOKEN}"
         }
       }
     }
@@ -82,7 +107,7 @@ const GithubMCPServerPage = () => {
         "ghcr.io/github/github-mcp-server"
       ],
       "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "<YOUR_TOKEN>"
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${process.env.NEXT_PUBLIC_GITHUB_TOKEN}"
       }
     }
   }
@@ -113,3 +138,5 @@ const GithubMCPServerPage = () => {
 };
 
 export default GithubMCPServerPage;
+
+    
