@@ -79,7 +79,7 @@ const Home = () => {
           <TabsTrigger value="codeline-display" className="tab-label">Codeline Display</TabsTrigger>
           <TabsTrigger value="workbook-interface" className="tab-label">Workbook Interface</TabsTrigger>
           <TabsTrigger value="code-creation" className="tab-label">Code Creation</TabsTrigger>
-          <TabsTrigger value="middle-wrecks" className="tab-label">MiddleWrecks</TabsTrigger>
+          <TabsTrigger value="middle-wrecks" className="tab-label">Middleware</TabsTrigger>
           <TabsTrigger value="fluffer-front-end" className="tab-label">Fluffer Front-End</TabsTrigger>
         </TabsList>
 
@@ -196,7 +196,7 @@ const Home = () => {
         <TabsContent value="middle-wrecks" className="outline-none">
           <Card>
             <CardHeader>
-              <CardTitle>MiddleWrecks</CardTitle>
+              <CardTitle>Middleware</CardTitle>
               <CardDescription>Coordinator manipulating Google ADK and building AUTOGEN bot.</CardDescription>
             </CardHeader>
             <CardContent>
