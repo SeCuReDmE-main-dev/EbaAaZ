@@ -24,6 +24,12 @@ import {
 import {ListBullet, Terminal} from "lucide-react";
 import {cn} from "@/lib/utils";
 
+interface McpOption {
+  id: string;
+  label: string;
+  description: string;
+}
+
 const GithubMCPServerPage = () => {
   const [githubToken, setGithubToken] = useState<string | undefined>(undefined);
   const [error, setError] = useState<string | null>(null);
@@ -35,29 +41,7 @@ const GithubMCPServerPage = () => {
   const [serverStatusColor, setServerStatusColor] = useState('bg-red-500'); // Initial red color
   const [isMCPActive, setIsMCPActive] = useState(false);
   const [mcpMode, setMcpMode] = useState<'cli' | 'visualisation'>('cli');
-  const [mcpOptions, setMcpOptions] = useState([
-    {id: 'get_me', label: 'Get User Details', description: 'Get details of the authenticated user'},
-    {
-      id: 'get_issue',
-      label: 'Get Issue',
-      description: 'Gets the contents of an issue within a repository',
-    },
-    {
-      id: 'create_issue',
-      label: 'Create Issue',
-      description: 'Create a new issue in a GitHub repository',
-    },
-    {
-      id: 'add_issue_comment',
-      label: 'Add Issue Comment',
-      description: 'Add a comment to an issue',
-    },
-    {
-      id: 'list_issues',
-      label: 'List Issues',
-      description: 'List and filter repository issues',
-    },
-  ]);
+  const [mcpOptions, setMcpOptions] = useState<McpOption[]>([]); // Define mcpOptions as an array of McpOption
 
   const hashToken = useCallback(async (token: string) => {
     const encoder = new TextEncoder();
@@ -81,6 +65,30 @@ const GithubMCPServerPage = () => {
         resolve(30);
       }, 1000);
     });
+  }, []);
+
+  const fetchMcpOptions = useCallback(async () => {
+    try {
+      // Use the provided external server URL
+      const serverURL = "https://raw.githubusercontent.com/modelcontextprotocol/servers/main/servers.json";
+      const response = await fetch(serverURL);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+
+      // Extract MCP options from the fetched data
+      const options: McpOption[] = data.servers.map((server: any) => ({
+        id: server.id,
+        label: server.name,
+        description: server.description,
+      }));
+
+      setMcpOptions(options);
+    } catch (error: any) {
+      setError(`Failed to fetch MCP options: ${error.message}`);
+      console.error("Error fetching MCP options:", error);
+    }
   }, []);
 
   useEffect(() => {
@@ -111,7 +119,8 @@ const GithubMCPServerPage = () => {
       }
     };
     loadToken();
-  }, [hashToken]);
+    fetchMcpOptions(); // Fetch MCP options when the component mounts
+  }, [hashToken, fetchMcpOptions]);
 
   useEffect(() => {
     if (githubToken && isTokenSetup) {

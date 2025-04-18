@@ -79,7 +79,7 @@ const Home = () => {
   const handleFetchError = async () => {
     try {
       // Use the provided external server URL
-      const serverURL = "https://github.com/modelcontextprotocol/servers.git";
+      const serverURL = "https://github.com/Celebrum/servers.git";
       const response = await fetch(serverURL + '/api/non-existent-endpoint'); // Assuming the server has an API endpoint
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -130,7 +130,7 @@ const Home = () => {
             )}
             <TabsTrigger value="workbook-interface" className="tab-label">Workbook Interface</TabsTrigger>
             <TabsTrigger value="code-creation" className="tab-label">Code Creation</TabsTrigger>
-            <TabsTrigger value="middleware" className="tab-label">MiddleWrecks</TabsTrigger>
+            <TabsTrigger value="middleware" className="tab-label">Middleware</TabsTrigger>
             <TabsTrigger value="fluffer-front-end" className="tab-label">Fluffer Front-End</TabsTrigger>
           </TabsList>
 
@@ -251,7 +251,7 @@ const Home = () => {
           <TabsContent value="middleware" className="outline-none">
             <Card>
               <CardHeader>
-                <CardTitle>MiddleWrecks</CardTitle>
+                <CardTitle>Middleware</CardTitle>
                 <CardDescription>Coordinator manipulating Google ADK and building AUTOGEN bot.</CardDescription>
               </CardHeader>
               <CardContent>
