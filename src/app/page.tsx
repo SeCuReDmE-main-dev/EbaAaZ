@@ -78,7 +78,9 @@ const Home = () => {
 
   const handleFetchError = async () => {
     try {
-      const response = await fetch('/api/non-existent-endpoint');
+      // Use the provided external server URL
+      const serverURL = "https://github.com/modelcontextprotocol/servers.git";
+      const response = await fetch(serverURL + '/api/non-existent-endpoint'); // Assuming the server has an API endpoint
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
