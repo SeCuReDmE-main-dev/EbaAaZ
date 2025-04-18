@@ -76,6 +76,23 @@ const Home = () => {
     setCurrentStep(2); // Move to the next step after uploading source
   };
 
+  const handleFetchError = async () => {
+    try {
+      const response = await fetch('/api/non-existent-endpoint');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log(data);
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: `Failed to fetch data: ${error.message}`,
+      });
+    }
+  };
+
   return (
     <div className="container mx-auto p-4 flex flex-col gap-4">
       <h1 className="text-2xl font-bold" style={{color: '#FF8C00'}}>EbaAaZ - Core Features</h1>
@@ -254,6 +271,9 @@ const Home = () => {
           </TabsContent>
         </Tabs>
       )}
+            <Button onClick={handleFetchError}>
+              Test Error Fetching Server
+            </Button>
     </div>
   );
 };
