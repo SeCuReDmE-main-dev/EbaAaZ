@@ -10,39 +10,39 @@ export default {
   theme: {
   	extend: {
   		colors: {
-  			background: '#0D1117',
-  			foreground: '#C9D1D9',
+  			background: '#1E1E1E',  /* Dark Grey */
+  			foreground: '#FFFFFF',  /* White */
   			card: {
-  				DEFAULT: '#2C3E50',
-  				foreground: '#ECF0F1'
+  				DEFAULT: '#333333',  /* Darker Grey */
+  				foreground: '#FFFFFF'   /* White */
   			},
   			popover: {
-  				DEFAULT: '#2C3E50',
-  				foreground: '#ECF0F1'
+  				DEFAULT: '#333333',  /* Darker Grey */
+  				foreground: '#FFFFFF'   /* White */
   			},
   			primary: {
-  				DEFAULT: '#3498DB',
-  				foreground: '#FFFFFF'
+  				DEFAULT: '#FF8C00',  /* Dark Orange */
+  				foreground: '#FFFFFF'   /* White */
   			},
   			secondary: {
-  				DEFAULT: '#ECF0F1',
-  				foreground: '#2C3E50'
+  				DEFAULT: '#555555',  /* Medium Grey */
+  				foreground: '#FFFFFF'   /* White */
   			},
   			muted: {
-  				DEFAULT: '#ECF0F1',
-  				foreground: '#2C3E50'
+  				DEFAULT: '#555555',  /* Medium Grey */
+  				foreground: '#FFFFFF'   /* White */
   			},
   			accent: {
-  				DEFAULT: '#3498DB',
-  				foreground: '#FFFFFF'
+  				DEFAULT: '#777777',  /* Light Grey */
+  				foreground: '#FFFFFF'   /* White */
   			},
   			destructive: {
   				DEFAULT: '#C0392B',
   				foreground: '#FFFFFF'
   			},
-  			border: '#2C3E50',
-  			input: '#2C3E50',
-  			ring: '#3498DB',
+  			border: '#555555',  /* Medium Grey */
+  			input: '#333333',  /* Darker Grey */
+  			ring: '#FF8C00',  /* Dark Orange */
   			chart: {
   				'1': '#3498DB',
   				'2': '#E74C3C',
@@ -51,14 +51,14 @@ export default {
   				'5': '#9B59B6'
   			},
   			sidebar: {
-  				DEFAULT: '#2C3E50',
-  				foreground: '#ECF0F1',
-  				primary: '#3498DB',
-  				'primary-foreground': '#FFFFFF',
-  				accent: '#34495E',
-  				'accent-foreground': '#ECF0F1',
-  				border: '#34495E',
-  				ring: '#3498DB'
+  				DEFAULT: '#333333',  /* Darker Grey */
+  				foreground: '#FFFFFF',   /* White */
+  				primary: '#FF8C00',  /* Dark Orange */
+  				'primary-foreground': '#FFFFFF',   /* White */
+  				accent: '#444444',  /* Slightly Lighter Dark Grey */
+  				'accent-foreground': '#FFFFFF',   /* White */
+  				border: '#444444',  /* Slightly Lighter Dark Grey */
+  				ring: '#FF8C00'  /* Dark Orange */
   			}
   		},
   		borderRadius: {

@@ -8,314 +8,101 @@ body {
 
 /* General Body Styles */
 body {
-  background-color: #0D1117; /* Dark Marine Blue */
-  color: #C9D1D9; /* Soft White */
-  font-family: 'Source Sans Pro', sans-serif !important;
-}
-
-/* Tilt and Change Color on Highlight */
-::selection {
-  background: #FF69B4; /* Flash Pink background */
-  color: #FFFF00; /* Yellow text */
-  font-style: italic;
-  transform: rotate(10deg);
-}
-
-/* Gradient Border on Hover */
-button, .hover-gradient {
-  border: 2px solid transparent;
-  background-image: linear-gradient(#0D1117, #0D1117), linear-gradient(45deg, #00A99D, #FF69B4);
-  background-origin: border-box;
-  background-clip: content-box, border-box;
-  transition: all 0.3s ease;
-}
-
-button:hover, .hover-gradient:hover {
-  border-color: transparent;
-  background-image: linear-gradient(#F76C6C, #F76C6C), linear-gradient(45deg, #00A99D, #FF69B4);
-}
-
-/* Animated Underline on Hover */
-a {
-  position: relative;
-  text-decoration: none;
-  color: #8B949E; /* Light Grey */
-}
-
-a::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 2px;
-  background-color: #FF69B4; /* Flash Pink */
-  left: 0;
-  bottom: -2px;
-  transform: scaleX(0);
-  transform-origin: bottom right;
-  transition: transform 0.3s ease;
-}
-
-a:hover::after {
-  transform: scaleX(1);
-  transform-origin: bottom left;
-}
-
-/* Neon Glow Effect */
-.glow {
-  color: #00FF00; /* Green */
-  text-shadow: 0 0 5px #00FF00, 0 0 10px #00FF00, 0 0 20px #00FF00, 0 0 40px #00FF00, 0 0 80px #00FF00;
-}
-
-/* 3D Button Effect */
-.button-3d {
-  background-color: #4F5D75; /* Metallic Silver */
-  color: #F76C6C; /* Orange */
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
-  box-shadow: 0 5px #2A0038; /* Dark Purple shadow */
-  transition: all 0.3s ease;
-}
-
-.button-3d:hover {
-  background-color: #00A99D; /* Teal */
-  box-shadow: 0 3px #2A0038; /* Dark Purple shadow */
-  transform: translateY(-2px);
-}
-
-.button-3d:active {
-  background-color: #00A99D; /* Teal */
-  box-shadow: 0 2px #2A0038; /* Dark Purple shadow */
-  transform: translateY(1px);
-}
-
-/* Custom Tab Styles */
-.tab-label {
-  font-family: 'Source Sans Pro', sans-serif !important; /* Custom font */
-  font-size: 13px !important; /* Normal tab text size */
-  color: #F76C6C !important; /* Orange color for inactive tabs */
-}
-
-/* Active Tab Styles */
-.tab-label[active="true"] {
-  font-weight: bold !important; /* Bold for active tab */
-  font-size: 15px !important; /* Slightly larger for active tab */
-  color: #00A99D !important; /* Teal color for active tab text */
-  border-bottom: 2px solid #00A99D !important; /* Teal underline */
-  background-color: #4F5D75 !important; /* Metallic Silver background */
+  background-color: #1E1E1E; /* Dark Grey */
+  color: #FFFFFF; /* White */
+  font-family: sans-serif !important;
 }
 
 /* General Header, Footer, Sidebar Styles */
 .header, .footer, .header-menu, .sidebar {
-  background-color: #2A0038 !important; /* Dark Purple */
-  border-bottom: 2px solid #FF69B4 !important; /* Pink underline */
-  color: #F76C6C !important; /* Orange */
+  background-color: #333333 !important; /* Darker Grey */
+  color: #FF8C00 !important; /* Dark Orange */
 }
 
 /* Additional elements for consistent theming */
 h1, h2, h3, h4, h5, h6, p, span, li, td, th, label {
-  color: #F76C6C !important; /* Orange */
+  color: #FF8C00 !important; /* Dark Orange */
 }
 
 input, textarea {
-  background-color: #0D1117 !important; /* Dark Marine Blue */
-  color: #F76C6C !important; /* Orange */
-  border: 1px solid #4F5D75 !important; /* Metallic Silver */
+  background-color: #333333 !important; /* Darker Grey */
+  color: #FFFFFF !important; /* White */
+  border: 1px solid #555555 !important; /* Medium Grey */
 }
 
 input:focus, textarea:focus {
-  border-color: #00A99D !important; /* Teal */
+  border-color: #FF8C00 !important; /* Dark Orange */
   outline: none !important;
 }
 
 button {
-  background-color: #4F5D75 !important; /* Metallic Silver */
-  color: #F76C6C !important; /* Orange */
-  border: 2px solid #00A99D !important; /* Teal border */
+  background-color: #FF8C00 !important; /* Dark Orange */
+  color: #FFFFFF !important; /* White */
+  border: 2px solid #555555 !important; /* Medium Grey */
+  border-radius: 5px;
+  padding: 10px 15px;
 }
 
 button:hover {
-  background-color: #00A99D !important; /* Teal */
-  border-color: #F76C6C !important; /* Orange */
-  color: #FFFFFF !important;
+  background-color: #333333 !important; /* Darker Grey */
+  border-color: #FF8C00 !important; /* Dark Orange */
+  color: #FFFFFF !important; /* White */
 }
 
-/* Custom Statusbar Size */
-.status-bar {
-  height: 20px !important; /* Example height, adjust as needed */
+a {
+    color: #FF8C00; /* Dark Orange */
+    text-decoration: none;
 }
 
-/* Compact Table Cells */
-.table-cell {
-  padding: 4px 8px !important; /* Adjust padding for compact table cells */
-}
-
-/* Compact Dropdowns */
-.dropdown-menu {
-  padding: 4px !important; /* Adjust padding for compact dropdowns */
-}
-
-/* Compact Menus */
-.menu-item {
-  height: 24px !important; /* Example height, adjust as needed */
-  padding: 2px 8px !important; /* Adjust padding for compact menus */
-}
-
-/* Compact Fields */
-.text-field {
-  height: 24px !important; /* Example height, adjust as needed */
-  padding: 4px 8px !important; /* Adjust padding for compact fields */
-}
-
-/* Floating Action Button (FAB) */
-.fab {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 60px;
-  height: 60px;
-  background-color: #00A99D; /* Teal */
-  color: #FFFFFF; /* White */
-  border-radius: 50%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  text-align: center;
-  cursor: pointer;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.fab:hover {
-  background-color: #F76C6C; /* Orange */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-}
-
-.fab:active {
-  background-color: #4F5D75; /* Metallic Silver */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-/* Custom Link Hover and Active Effects */
 a:hover {
-  color: #00FF00; /* Green */
+    color: #FFFFFF; /* White */
 }
-
-a:active {
-  color: #000000; /* Black */
-}
-
-/* Anti-Entropy Poem Styling */
-.poem {
-  font-family: 'Source Sans Pro', sans-serif;
-  color: #C9D1D9; /* Soft White */
-  background-color: #0D1117; /* Dark Marine Blue */
-  padding: 20px;
-  border-left: 5px solid #F76C6C; /* Orange */
-  margin: 20px 0;
-}
-
-/* Dark Mode Toggle */
-.dark-mode-toggle {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background-color: #4F5D75; /* Metallic Silver */
-  color: #FFFFFF; /* White */
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.dark-mode-toggle:hover {
-  background-color: #00A99D; /* Teal */
-}
-
-/* Applying Anti-Entropy Principles for Layout Consistency */
-.container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-}
-
-.item {
-  flex: 1 1 calc(33.333% - 20px);
-  margin: 10px;
-  background-color: #1A3A5F; /* Marine Blue */
-  color: #C9D1D9; /* Soft White */
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.item:hover {
-  transform: translateY(-10px);
-}
-
 
 @layer base {
   :root {
-    --background: 12 20% 7%;
-    --foreground: 30 10% 70%;
-    --card: 12 20% 7%;
-    --card-foreground: 30 10% 70%;
-    --popover: 12 20% 7%;
-    --popover-foreground: 30 10% 70%;
-    --primary: 207 83% 65%;
-    --primary-foreground: 210 20% 98%;
-    --secondary: 20 14.3% 46.9%;
-    --secondary-foreground: 60 9.1% 8.8%;
-    --muted: 20 14.3% 46.9%;
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 45 100% 50%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 240 4.8% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 4.8% 15.9%;
     --muted-foreground: 240 5% 64.9%;
-    --accent: 39 98.7% 59%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 20% 98%;
-    --border: 20 14.3% 46.9%;
-    --input: 20 14.3% 46.9%;
-    --ring: 207 83% 65%;
+    --accent: 45 100% 50%;
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 72.2% 50.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 10%;
+    --input: 240 5.9% 10%;
+    --ring: 0 0% 98%;
     --radius: 0.5rem;
-    --sidebar-background: 220 13% 13%;
-    --sidebar-foreground: 30 10% 70%;
-    --sidebar-primary: 207 83% 65%;
-    --sidebar-primary-foreground: 210 20% 98%;
-    --sidebar-accent: 220 13% 23%;
-    --sidebar-accent-foreground: 39 98.7% 59%;
-    --sidebar-border: 20 14.3% 46.9%;
-    --sidebar-ring: 207 83% 65%;
   }
+
   .dark {
-    --background: 12 20% 7%;
-    --foreground: 30 10% 70%;
-    --card: 12 20% 7%;
-    --card-foreground: 30 10% 70%;
-    --popover: 12 20% 7%;
-    --popover-foreground: 30 10% 70%;
-    --primary: 207 83% 65%;
-    --primary-foreground: 210 20% 98%;
-    --secondary: 20 14.3% 46.9%;
-    --secondary-foreground: 60 9.1% 8.8%;
-    --muted: 20 14.3% 46.9%;
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+        --primary: 45 100% 50%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 240 4.8% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 4.8% 15.9%;
     --muted-foreground: 240 5% 64.9%;
-    --accent: 39 98.7% 59%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 45 100% 50%;
+    --accent-foreground: 0 0% 0%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 20% 98%;
-    --border: 20 14.3% 46.9%;
-    --input: 20 14.3% 46.9%;
-    --ring: 207 83% 65%;
-    --sidebar-background: 220 13% 13%;
-    --sidebar-foreground: 30 10% 70%;
-    --sidebar-primary: 207 83% 65%;
-    --sidebar-primary-foreground: 210 20% 98%;
-    --sidebar-accent: 220 13% 23%;
-    --sidebar-accent-foreground: 39 98.7% 59%;
-    --sidebar-border: 20 14.3% 46.9%;
-    --sidebar-ring: 207 83% 65%;
+    --border: 240 5.9% 10%;
+    --input: 240 5.9% 10%;
+    --ring: 0 0% 98%;
+    --radius: 0.5rem;
   }
 }
 

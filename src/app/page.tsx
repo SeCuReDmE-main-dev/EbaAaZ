@@ -78,7 +78,7 @@ const Home = () => {
 
   return (
     <div className="container mx-auto p-4 flex flex-col gap-4">
-      <h1 className="text-2xl font-bold glow">EbaAaZ - Core Features</h1>
+      <h1 className="text-2xl font-bold" style={{color: '#FF8C00'}}>EbaAaZ - Core Features</h1>
 
       {currentStep === 1 && (
         <Card>
