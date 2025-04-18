@@ -70,7 +70,7 @@ const GithubMCPServerPage = () => {
   const fetchMcpOptions = useCallback(async () => {
     try {
       // Use the provided external server URL
-      const serverURL = "https://raw.githubusercontent.com/modelcontextprotocol/servers/main/servers.json";
+      const serverURL = "https://raw.githubusercontent.com/Celebrum/servers/main/servers.json";
       const response = await fetch(serverURL);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -451,3 +451,5 @@ const GithubMCPServerPage = () => {
 };
 
 export default GithubMCPServerPage;
+
+    
