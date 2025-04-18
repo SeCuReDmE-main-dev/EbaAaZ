@@ -10,6 +10,7 @@ import {Copy, Loader2} from "lucide-react";
 import {Input} from "@/components/ui/input";
 import {generatePodcastSummary} from "@/ai/flows/podcast-summary";
 import {graftToCode} from "@/ai/flows/graft-to-code-conversion";
+import { cn } from "@/lib/utils";
 
 const Home = () => {
   const [dataInput, setDataInput] = useState('');
@@ -102,11 +103,15 @@ const Home = () => {
         <Tabs defaultValue="data-load">
           <TabsList className="mb-4">
             <TabsTrigger value="data-load" className="tab-label">Data Load &amp; Podcast</TabsTrigger>
-            <TabsTrigger value="input-capture" className="tab-label">Input Capture</TabsTrigger>
-            <TabsTrigger value="codeline-display" className="tab-label">Codeline Display</TabsTrigger>
+            {currentStep >= 2 && (
+              <TabsTrigger value="input-capture" className="tab-label">Input Capture</TabsTrigger>
+            )}
+            {currentStep >= 3 && (
+              <TabsTrigger value="codeline-display" className="tab-label">Codeline Display</TabsTrigger>
+            )}
             <TabsTrigger value="workbook-interface" className="tab-label">Workbook Interface</TabsTrigger>
             <TabsTrigger value="code-creation" className="tab-label">Code Creation</TabsTrigger>
-            <TabsTrigger value="middleware" className="tab-label">Middleware</TabsTrigger>
+            <TabsTrigger value="middleware" className="tab-label">MiddleWrecks</TabsTrigger>
             <TabsTrigger value="fluffer-front-end" className="tab-label">Fluffer Front-End</TabsTrigger>
           </TabsList>
 
@@ -142,59 +147,63 @@ const Home = () => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="input-capture" className="outline-none">
-            <Card>
-              <CardHeader>
-                <CardTitle>Input Capture</CardTitle>
-                <CardDescription>Accept user input of classgraft and flowgraft.</CardDescription>
-              </CardHeader>
-              <CardContent className="grid gap-4">
-                <Textarea
-                  placeholder="Enter your classgraft and flowgraft here..."
-                  value={graftInput}
-                  onChange={(e) => setGraftInput(e.target.value)}
-                />
-                <Button onClick={handleGraftToCode} disabled={isLoadingCode}>
-                  {isLoadingCode ? (
-                    <>
-                      Generating Codeline <Loader2 className="ml-2 h-4 w-4 animate-spin"/>
-                    </>
-                  ) : (
-                    "Transform Graft to Codeline"
-                  )}
-                </Button>
-              </CardContent>
-            </Card>
-          </TabsContent>
+          {currentStep >= 2 && (
+            <TabsContent value="input-capture" className="outline-none">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Input Capture</CardTitle>
+                  <CardDescription>Accept user input of classgraft and flowgraft.</CardDescription>
+                </CardHeader>
+                <CardContent className="grid gap-4">
+                  <Textarea
+                    placeholder="Enter your classgraft and flowgraft here..."
+                    value={graftInput}
+                    onChange={(e) => setGraftInput(e.target.value)}
+                  />
+                  <Button onClick={handleGraftToCode} disabled={isLoadingCode}>
+                    {isLoadingCode ? (
+                      <>
+                        Generating Codeline <Loader2 className="ml-2 h-4 w-4 animate-spin"/>
+                      </>
+                    ) : (
+                      "Transform Graft to Codeline"
+                    )}
+                  </Button>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          )}
 
-          <TabsContent value="codeline-display" className="outline-none">
-            <Card>
-              <CardHeader>
-                <CardTitle>Codeline Display</CardTitle>
-                <CardDescription>Display the generated codeline.</CardDescription>
-              </CardHeader>
-              <CardContent className="grid gap-4">
-                {codeline ? (
-                  <div className="relative">
-                    <Textarea
-                      readOnly
-                      value={codeline}
-                      className="mb-4"
-                    />
-                    <Button
-                      onClick={handleCopyToClipboard}
-                      className="absolute top-2 right-2"
-                    >
-                      <Copy className="h-4 w-4 mr-2"/>
-                      Copy to Clipboard
-                    </Button>
-                  </div>
-                ) : (
-                  <p>No codeline generated yet. Please input graft data.</p>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
+          {currentStep >= 3 && (
+            <TabsContent value="codeline-display" className="outline-none">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Codeline Display</CardTitle>
+                  <CardDescription>Display the generated codeline.</CardDescription>
+                </CardHeader>
+                <CardContent className="grid gap-4">
+                  {codeline ? (
+                    <div className="relative">
+                      <Textarea
+                        readOnly
+                        value={codeline}
+                        className="mb-4"
+                      />
+                      <Button
+                        onClick={handleCopyToClipboard}
+                        className="absolute top-2 right-2"
+                      >
+                        <Copy className="h-4 w-4 mr-2"/>
+                        Copy to Clipboard
+                      </Button>
+                    </div>
+                  ) : (
+                    <p>No codeline generated yet. Please input graft data.</p>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+          )}
 
           <TabsContent value="workbook-interface" className="outline-none">
             <Card>
@@ -223,7 +232,7 @@ const Home = () => {
           <TabsContent value="middleware" className="outline-none">
             <Card>
               <CardHeader>
-                <CardTitle>Middleware</CardTitle>
+                <CardTitle>MiddleWrecks</CardTitle>
                 <CardDescription>Coordinator manipulating Google ADK and building AUTOGEN bot.</CardDescription>
               </CardHeader>
               <CardContent>

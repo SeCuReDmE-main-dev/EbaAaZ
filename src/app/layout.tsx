@@ -1,5 +1,12 @@
 import type {Metadata} from 'next';
 import './globals.css';
+import { Source_Sans_Pro } from 'next/font/google';
+
+const sourceSansPro = Source_Sans_Pro({
+  weight: ['400', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'Firebase Studio App',
@@ -14,16 +21,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Mayfair+Sans:ital,wght@1,700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body style={{ fontFamily: 'Mayfair Sans, sans-serif' }}>
+      <body className={sourceSansPro.className}>
         {children}
       </body>
     </html>
   );
 }
+
 
