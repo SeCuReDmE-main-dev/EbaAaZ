@@ -72,14 +72,14 @@ const Home = () => {
     <div className="container mx-auto p-4 flex flex-col gap-4">
       <h1 className="text-2xl font-bold glow">EbaAaZ - Core Features</h1>
 
-      <Tabs defaultActiveKey="data-load">
+      <Tabs defaultValue="data-load">
         <TabsList className="mb-4">
           <TabsTrigger value="data-load" className="tab-label">Data Load &amp; Podcast</TabsTrigger>
           <TabsTrigger value="input-capture" className="tab-label">Input Capture</TabsTrigger>
           <TabsTrigger value="codeline-display" className="tab-label">Codeline Display</TabsTrigger>
           <TabsTrigger value="workbook-interface" className="tab-label">Workbook Interface</TabsTrigger>
           <TabsTrigger value="code-creation" className="tab-label">Code Creation</TabsTrigger>
-          <TabsTrigger value="middle-wrecks" className="tab-label">Middleware</TabsTrigger>
+          <TabsTrigger value="middleware" className="tab-label">Middleware</TabsTrigger>
           <TabsTrigger value="fluffer-front-end" className="tab-label">Fluffer Front-End</TabsTrigger>
         </TabsList>
 
@@ -193,7 +193,7 @@ const Home = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="middle-wrecks" className="outline-none">
+        <TabsContent value="middleware" className="outline-none">
           <Card>
             <CardHeader>
               <CardTitle>Middleware</CardTitle>
