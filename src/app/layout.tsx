@@ -19,7 +19,7 @@ export default function RootLayout({
         <header className="header">
           <div className="header-menu">
             <Link href="/" style={{ margin: '0 10px' }}>Home</Link>
-            <Link href="/github-mcp-server" style={{ margin: '0 10px' }}>GitHub MCP Server</Link>
+            <Link href="/github-mcp-server" style={{ margin: '0 10px' }}>MCP Server</Link>
           </div>
         </header>
         {children}
@@ -30,4 +30,3 @@ export default function RootLayout({
     </html>
   );
 }
-

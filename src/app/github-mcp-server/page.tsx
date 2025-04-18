@@ -190,7 +190,7 @@ const GithubMCPServerPage = () => {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold" style={{color: '#FF8C00'}}>
-        GitHub MCP Server
+        MCP Server
       </h1>
 
       {error && <div className="text-red-500">Error: {error}</div>}
@@ -201,7 +201,7 @@ const GithubMCPServerPage = () => {
             <AlertDialogHeader>
               <AlertDialogTitle>GitHub Token Required</AlertDialogTitle>
               <AlertDialogDescription>
-                To use the GitHub MCP Server, you need to provide a GitHub
+                To use the MCP Server, you need to provide a GitHub
                 Personal Access Token.
                 <br/>
                 <a
@@ -248,7 +248,7 @@ const GithubMCPServerPage = () => {
           onClick={toggleMCPActivation}
           disabled={!isTokenSetup}
         >
-          {isMCPActive ? 'Deactivate GitHub MCP Server' : 'Activate GitHub MCP Server'}
+          {isMCPActive ? 'Deactivate MCP Server' : 'Activate MCP Server'}
         </Button>
         {tokenExpiryDays !== null && (
           <p className="mt-2">
@@ -266,9 +266,9 @@ const GithubMCPServerPage = () => {
           </SheetTrigger>
           <SheetContent className="sm:max-w-sm">
             <SheetHeader>
-              <SheetTitle>GitHub MCP Server Options</SheetTitle>
+              <SheetTitle>MCP Server Options</SheetTitle>
               <SheetDescription>
-                Select your preferred mode and options for the GitHub MCP Server.
+                Select your preferred mode and options for the MCP Server.
               </SheetDescription>
             </SheetHeader>
             <div className="grid gap-4 py-4">
@@ -304,7 +304,7 @@ const GithubMCPServerPage = () => {
       )}
 
       <p className="mt-4">
-        The GitHub MCP Server is a Model Context Protocol (MCP) server that
+        The MCP Server is a Model Context Protocol (MCP) server that
         provides seamless integration with GitHub APIs, enabling advanced
         automation and interaction capabilities for developers and tools.
       </p>
