@@ -4,17 +4,25 @@ import React, {useState, useEffect, useCallback} from 'react';
 import {
   AlertDialog,
   AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import {Button} from '@/components/ui/button';
 import {Input} from '@/components/ui/input';
 import {Label} from '@/components/ui/label';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+import {ListBullet, Terminal} from "lucide-react";
+import {cn} from "@/lib/utils";
 
 const GithubMCPServerPage = () => {
   const [githubToken, setGithubToken] = useState<string | undefined>(undefined);
@@ -23,6 +31,33 @@ const GithubMCPServerPage = () => {
   const [open, setOpen] = useState(false);
   const [tempToken, setTempToken] = useState('');
   const [hashedToken, setHashedToken] = useState('');
+  const [tokenExpiryDays, setTokenExpiryDays] = useState<number | null>(null);
+  const [serverStatusColor, setServerStatusColor] = useState('bg-red-500'); // Initial red color
+  const [isMCPActive, setIsMCPActive] = useState(false);
+  const [mcpMode, setMcpMode] = useState<'cli' | 'visualisation'>('cli');
+  const [mcpOptions, setMcpOptions] = useState([
+    {id: 'get_me', label: 'Get User Details', description: 'Get details of the authenticated user'},
+    {
+      id: 'get_issue',
+      label: 'Get Issue',
+      description: 'Gets the contents of an issue within a repository',
+    },
+    {
+      id: 'create_issue',
+      label: 'Create Issue',
+      description: 'Create a new issue in a GitHub repository',
+    },
+    {
+      id: 'add_issue_comment',
+      label: 'Add Issue Comment',
+      description: 'Add a comment to an issue',
+    },
+    {
+      id: 'list_issues',
+      label: 'List Issues',
+      description: 'List and filter repository issues',
+    },
+  ]);
 
   const hashToken = useCallback(async (token: string) => {
     const encoder = new TextEncoder();
@@ -35,6 +70,19 @@ const GithubMCPServerPage = () => {
     return hashHex;
   }, []);
 
+  const calculateTokenExpiry = useCallback(async (token: string) => {
+    // Placeholder: Replace with actual API call to validate the token
+    // and get its expiry or creation date.
+    // This is just a simulation for demonstration purposes.
+    return new Promise<number>((resolve) => {
+      // Simulate a successful validation that takes 1 second
+      setTimeout(() => {
+        // For testing purposes, tokens are valid for 30 days.
+        resolve(30);
+      }, 1000);
+    });
+  }, []);
+
   useEffect(() => {
     const loadToken = async () => {
       const storedToken = localStorage.getItem('githubToken');
@@ -45,25 +93,68 @@ const GithubMCPServerPage = () => {
       }
 
       const token = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
-      if (token) {
-        setGithubToken(token);
-        try {
-          const hashed = await hashToken(token);
-          setHashedToken(hashed);
-          localStorage.setItem('githubToken', hashed);
-          setIsTokenSetup(true);
-        } catch (err) {
-          setError('Error hashing the token.');
-          console.error(err);
-        }
+      if (!token) {
+        setError('GitHub Personal Access Token not found in environment variables.');
+        console.error('GitHub Personal Access Token not found in environment variables.');
+        setOpen(true);
         return;
       }
-
-      setOpen(true);
+      setGithubToken(token);
+      try {
+        const hashed = await hashToken(token);
+        setHashedToken(hashed);
+        localStorage.setItem('githubToken', hashed);
+        setIsTokenSetup(true);
+      } catch (err) {
+        setError('Error hashing the token.');
+        console.error(err);
+      }
     };
-
     loadToken();
   }, [hashToken]);
+
+  useEffect(() => {
+    if (githubToken && isTokenSetup) {
+      const checkTokenValidity = async () => {
+        try {
+          const expiryDays = await calculateTokenExpiry(githubToken);
+          setTokenExpiryDays(expiryDays);
+        } catch (error) {
+          console.error('Error calculating token expiry:', error);
+          setError('Error calculating token expiry.');
+          setServerStatusColor('bg-red-500'); // Set to red in case of error
+          return;
+        }
+      };
+
+      checkTokenValidity();
+    }
+  }, [githubToken, isTokenSetup, calculateTokenExpiry]);
+
+  useEffect(() => {
+    if (tokenExpiryDays !== null) {
+      const updateStatusColor = () => {
+        if (tokenExpiryDays <= 0) {
+          setServerStatusColor('bg-red-500 animate-pulse'); // Flash red if expired
+        } else if (tokenExpiryDays <= 7) {
+          // Dark Orange if less than 7 days
+          setServerStatusColor('bg-orange-500');
+        } else {
+          // Bright Green if more than 7 days
+          setServerStatusColor('bg-green-500');
+        }
+      };
+
+      updateStatusColor();
+
+      // Set interval to update color every day
+      const intervalId = setInterval(() => {
+        setTokenExpiryDays(prevDays => (prevDays ? prevDays - 1 : 0));
+      }, 24 * 60 * 60 * 1000); // Update every 24 hours
+
+      return () => clearInterval(intervalId);
+    }
+  }, [tokenExpiryDays]);
 
   const handleTokenSubmit = async () => {
     if (!tempToken) {
@@ -79,10 +170,21 @@ const GithubMCPServerPage = () => {
       setIsTokenSetup(true);
       setOpen(false);
       setError(null);
+      const expiryDays = await calculateTokenExpiry(tempToken);
+      setTokenExpiryDays(expiryDays);
     } catch (err) {
       setError('Error hashing the token.');
       console.error(err);
+      setServerStatusColor('bg-red-500');
     }
+  };
+
+  const toggleMCPActivation = () => {
+    setIsMCPActive(!isMCPActive);
+  };
+
+  const handleMcpModeChange = (mode: 'cli' | 'visualisation') => {
+    setMcpMode(mode);
   };
 
   return (
@@ -101,7 +203,7 @@ const GithubMCPServerPage = () => {
               <AlertDialogDescription>
                 To use the GitHub MCP Server, you need to provide a GitHub
                 Personal Access Token.
-                <br />
+                <br/>
                 <a
                   href="https://github.com/settings/tokens/new"
                   target="_blank"
@@ -113,9 +215,6 @@ const GithubMCPServerPage = () => {
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
-              <AlertDialogAction onClick={handleTokenSubmit}>
-                Submit Token
-              </AlertDialogAction>
               <div className="grid gap-2 w-full">
                 <Label htmlFor="token">GitHub Token</Label>
                 <Input
@@ -126,6 +225,9 @@ const GithubMCPServerPage = () => {
                   onChange={(e) => setTempToken(e.target.value)}
                 />
               </div>
+              <AlertDialogAction onClick={handleTokenSubmit}>
+                Submit Token
+              </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
@@ -140,7 +242,68 @@ const GithubMCPServerPage = () => {
         </div>
       )}
 
-      <p>
+      <div className="mt-4">
+        <Button
+          className={cn(serverStatusColor, "text-white font-bold py-2 px-4 rounded")}
+          onClick={toggleMCPActivation}
+          disabled={!isTokenSetup}
+        >
+          {isMCPActive ? 'Deactivate GitHub MCP Server' : 'Activate GitHub MCP Server'}
+        </Button>
+        {tokenExpiryDays !== null && (
+          <p className="mt-2">
+            Token Validity: {tokenExpiryDays} days
+          </p>
+        )}
+      </div>
+
+      {isMCPActive && (
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="outline" className="mt-4">
+              MCP Options
+            </Button>
+          </SheetTrigger>
+          <SheetContent className="sm:max-w-sm">
+            <SheetHeader>
+              <SheetTitle>GitHub MCP Server Options</SheetTitle>
+              <SheetDescription>
+                Select your preferred mode and options for the GitHub MCP Server.
+              </SheetDescription>
+            </SheetHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Label htmlFor="mode">Mode:</Label>
+                <div className="flex gap-2">
+                  <Button
+                    variant={mcpMode === 'cli' ? 'default' : 'outline'}
+                    onClick={() => handleMcpModeChange('cli')}
+                  >
+                    <Terminal className="mr-2 h-4 w-4"/> CLI Mode
+                  </Button>
+                  <Button
+                    variant={mcpMode === 'visualisation' ? 'default' : 'outline'}
+                    onClick={() => handleMcpModeChange('visualisation')}
+                  >
+                    <ListBullet className="mr-2 h-4 w-4"/> Visualisation Mode
+                  </Button>
+                </div>
+              </div>
+
+              <div className="grid gap-2">
+                <Label>Available Options:</Label>
+                {mcpOptions.map((option) => (
+                  <Button key={option.id} variant="ghost">
+                    {option.label}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          </SheetContent>
+        </Sheet>
+      )}
+
+      <p className="mt-4">
         The GitHub MCP Server is a Model Context Protocol (MCP) server that
         provides seamless integration with GitHub APIs, enabling advanced
         automation and interaction capabilities for developers and tools.
