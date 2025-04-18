@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,47 +13,68 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import {Button} from '@/components/ui/button';
+import {Input} from '@/components/ui/input';
+import {Label} from '@/components/ui/label';
 
 const GithubMCPServerPage = () => {
   const [githubToken, setGithubToken] = useState<string | undefined>(undefined);
   const [error, setError] = useState<string | null>(null);
   const [isTokenSetup, setIsTokenSetup] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
+  const [tempToken, setTempToken] = useState('');
+  const [hashedToken, setHashedToken] = useState('');
 
-  useEffect(() => {
-    // Check if the token is already stored in localStorage
-    const storedToken = localStorage.getItem('githubToken');
-    if (storedToken) {
-      setGithubToken(storedToken);
-      setIsTokenSetup(true);
-      return;
-    }
-
-    // Load GitHub token from environment variable
-    const token = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
-
-    if (!token) {
-      // Token not found in env, show the setup modal
-      setOpen(true);
-      return;
-    }
-
-    setGithubToken(token);
-    localStorage.setItem('githubToken', token); // Store the token in localStorage
-    setIsTokenSetup(true);
+  const hashToken = useCallback(async (token: string) => {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(token);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+    return hashHex;
   }, []);
 
-  const handleTokenSubmit = async () => {
-    // Implement your logic to handle token submission here,
-    // e.g., store the token in localStorage and set the githubToken state.
-    const token = prompt('Please enter your GitHub Personal Access Token:');
-    if (token) {
+  useEffect(() => {
+    const loadToken = async () => {
+      const storedToken = localStorage.getItem('githubToken');
+      if (storedToken) {
+        setGithubToken(storedToken);
+        setIsTokenSetup(true);
+        return;
+      }
+
+      const token = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
+      if (!token) {
+        setOpen(true);
+        return;
+      }
+
       setGithubToken(token);
       localStorage.setItem('githubToken', token);
       setIsTokenSetup(true);
-      setOpen(false); // Close the modal
-    } else {
+    };
+
+    loadToken();
+  }, []);
+
+  const handleTokenSubmit = async () => {
+    if (!tempToken) {
       setError('GitHub Personal Access Token is required.');
+      return;
+    }
+
+    try {
+      const hashed = await hashToken(tempToken);
+      setHashedToken(hashed);
+      localStorage.setItem('githubToken', hashed);
+      setGithubToken(hashed);
+      setIsTokenSetup(true);
+      setOpen(false);
+      setError(null);
+    } catch (err) {
+      setError('Error hashing the token.');
+      console.error(err);
     }
   };
 
@@ -85,12 +106,31 @@ const GithubMCPServerPage = () => {
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
+              <div className="grid gap-2 w-full">
+                <Label htmlFor="token">GitHub Token</Label>
+                <Input
+                  type="password"
+                  id="token"
+                  placeholder="Enter your GitHub Personal Access Token"
+                  value={tempToken}
+                  onChange={(e) => setTempToken(e.target.value)}
+                />
+              </div>
               <AlertDialogAction onClick={handleTokenSubmit}>
                 Submit Token
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+      )}
+
+      {hashedToken && (
+        <div className="mt-4">
+          <p>
+            Hashed Token (SHA-256):{' '}
+            <span className="font-mono break-all">{hashedToken}</span>
+          </p>
+        </div>
       )}
 
       <p>
