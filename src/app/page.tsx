@@ -1,281 +1,236 @@
 "use client";
 
-import {useState} from 'react';
-import {Button} from "@/components/ui/button";
-import {Textarea} from "@/components/ui/textarea";
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
-import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
-import {useToast} from "@/hooks/use-toast";
-import {Copy, Loader2} from "lucide-react";
-import {Input} from "@/components/ui/input";
-import {generatePodcastSummary} from "@/ai/flows/podcast-summary";
-import {graftToCode} from "@/ai/flows/graft-to-code-conversion";
-import { cn } from "@/lib/utils";
+import { useState } from 'react';
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
+import { Loader2 } from "lucide-react";
+import { generatePodcastSummary } from "@/ai/flows/podcast-summary"; // Keep for potential future use
+import { graftToCode } from "@/ai/flows/graft-to-code-conversion"; // Keep for potential future use
 
 const Home = () => {
-  const [dataInput, setDataInput] = useState('');
-  const [graftInput, setGraftInput] = useState('');
-  const [codeline, setCodeline] = useState('');
-  const [isLoadingSummary, setIsLoadingSummary] = useState(false);
-  const [isLoadingCode, setIsLoadingCode] = useState(false);
-  const [podcastSummary, setPodcastSummary] = useState('');
-  const {toast} = useToast();
-
+  const [projectDefinition, setProjectDefinition] = useState('');
+  const [swarmConfig, setSwarmConfig] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
 
-  const handleDataLoad = async () => {
-    setIsLoadingSummary(true);
-    try {
-      const result = await generatePodcastSummary({data: dataInput});
-      setPodcastSummary(result.podcastSummary);
-      toast({
-        title: "Podcast summary generated!",
-        description: "Summary has been generated from loaded data.",
-      });
-      setCurrentStep(2); // Move to the next step after generating summary
-    } catch (error) {
+  const handleDefineProject = () => {
+    if (!projectDefinition) {
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to generate podcast summary.",
+        description: "Please define the project scope first.",
       });
-    } finally {
-      setIsLoadingSummary(false);
+      return;
     }
-  };
-
-  const handleGraftToCode = async () => {
-    setIsLoadingCode(true);
-    try {
-      const result = await graftToCode({graft: graftInput});
-      setCodeline(result.codeline);
+    setIsLoading(true);
+    // Simulate processing project definition
+    setTimeout(() => {
       toast({
-        title: "Code generated!",
-        description: "Codeline has been generated from the input graft.",
+        title: "Project Defined",
+        description: "Project scope has been processed. Ready for configuration.",
       });
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to generate codeline.",
-      });
-    } finally {
-      setIsLoadingCode(false);
-    }
+      setCurrentStep(2);
+      setIsLoading(false);
+    }, 1500);
   };
 
-  const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText(codeline);
-    toast({
-      title: "Copied to clipboard!",
-      description: "The generated code has been copied to your clipboard.",
-    });
-  };
-
-  const handleUploadSource = () => {
-    setCurrentStep(2); // Move to the next step after uploading source
-  };
-
-  const handleFetchError = async () => {
-    try {
-      // Use the provided external server URL
-      const serverURL = "https://github.com/modelcontextprotocol/servers.git";
-      const response = await fetch(serverURL + '/api/non-existent-endpoint'); // Assuming the server has an API endpoint
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      console.log(data);
-    } catch (error: any) {
+   const handleConfigureSwarm = () => {
+    if (!swarmConfig) {
       toast({
         variant: "destructive",
         title: "Error",
-        description: `Failed to fetch data: ${error.message}`,
+        description: "Please provide configuration details for the swarm.",
       });
+      return;
     }
+    setIsLoading(true);
+    // Simulate configuring the swarm
+    setTimeout(() => {
+      toast({
+        title: "Swarm Configured",
+        description: "Builder and configurator swarm is ready.",
+      });
+      setCurrentStep(3); // Move to a state where tabs are fully available
+      setIsLoading(false);
+    }, 1500);
   };
+
 
   return (
     <div className="container mx-auto p-4 flex flex-col gap-4">
-      <h1 className="text-2xl font-bold" style={{color: '#FF8C00'}}>EbaAaZ Hub</h1>
+      <h1 className="text-2xl font-bold" style={{ color: '#FF8C00' }}>EbaAaZ Hub: Swarm Coordination</h1>
 
       {currentStep === 1 && (
         <Card>
           <CardHeader>
-            <CardTitle>Add a source to get started</CardTitle>
-            <CardDescription>Upload your data source to begin.</CardDescription>
+            <CardTitle>Step 1: Define Your Project</CardTitle>
+            <CardDescription>
+              Describe the project EbaAaZ needs to coordinate. Outline the goals, components, and desired outcome. EbaAaZ will analyze this to prepare the swarm.
+            </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">
             <Textarea
-              placeholder="Upload your data source here..."
-              value={dataInput}
-              onChange={(e) => setDataInput(e.target.value)}
+              placeholder="Define project scope, components, technologies (e.g., GCP services, AI models), and goals..."
+              value={projectDefinition}
+              onChange={(e) => setProjectDefinition(e.target.value)}
+              rows={10}
             />
-            <Button onClick={handleUploadSource}>
-              Upload a source
+            <Button onClick={handleDefineProject} disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  Analyzing Definition <Loader2 className="ml-2 h-4 w-4 animate-spin" />
+                </>
+              ) : (
+                "Define Project & Proceed"
+              )}
             </Button>
           </CardContent>
         </Card>
       )}
 
-      {currentStep >= 2 && (
-        <Tabs defaultValue="data-load">
-          <TabsList className="mb-4">
-            <TabsTrigger value="data-load" className="tab-label">Data Load &amp; Podcast</TabsTrigger>
-            {currentStep >= 2 && (
-              <TabsTrigger value="input-capture" className="tab-label">Input Capture</TabsTrigger>
-            )}
-            {currentStep >= 3 && (
-              <TabsTrigger value="codeline-display" className="tab-label">Codeline Display</TabsTrigger>
-            )}
-            <TabsTrigger value="workbook-interface" className="tab-label">Workbook Interface</TabsTrigger>
-            <TabsTrigger value="code-creation" className="tab-label">Code Creation</TabsTrigger>
-            <TabsTrigger value="middleware" className="tab-label">Middleware</TabsTrigger>
-            <TabsTrigger value="fluffer-front-end" className="tab-label">Fluffer Front-End</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="data-load" className="outline-none">
-            <Card>
-              <CardHeader>
-                <CardTitle>Data Load &amp; Podcast</CardTitle>
-                <CardDescription>Load data, chat, and cast a podcast about the data.</CardDescription>
-              </CardHeader>
-              <CardContent className="grid gap-4">
-                <Textarea
-                  placeholder="Load your data here..."
-                  value={dataInput}
-                  onChange={(e) => setDataInput(e.target.value)}
-                />
-                <Button onClick={handleDataLoad} disabled={isLoadingSummary}>
-                  {isLoadingSummary ? (
-                    <>
-                      Generating Summary <Loader2 className="ml-2 h-4 w-4 animate-spin"/>
-                    </>
-                  ) : (
-                    "Generate Podcast Summary"
-                  )}
-                </Button>
-                {podcastSummary && (
-                  <Textarea
-                    readOnly
-                    value={podcastSummary}
-                    className="mt-2"
-                  />
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {currentStep >= 2 && (
-            <TabsContent value="input-capture" className="outline-none">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Input Capture</CardTitle>
-                  <CardDescription>Accept user input of classgraft and flowgraft.</CardDescription>
-                </CardHeader>
-                <CardContent className="grid gap-4">
-                  <Textarea
-                    placeholder="Enter your classgraft and flowgraft here..."
-                    value={graftInput}
-                    onChange={(e) => setGraftInput(e.target.value)}
-                  />
-                  <Button onClick={handleGraftToCode} disabled={isLoadingCode}>
-                    {isLoadingCode ? (
-                      <>
-                        Generating Codeline <Loader2 className="ml-2 h-4 w-4 animate-spin"/>
-                      </>
-                    ) : (
-                      "Transform Graft to Codeline"
-                    )}
-                  </Button>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          )}
-
-          {currentStep >= 3 && (
-            <TabsContent value="codeline-display" className="outline-none">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Codeline Display</CardTitle>
-                  <CardDescription>Display the generated codeline.</CardDescription>
-                </CardHeader>
-                <CardContent className="grid gap-4">
-                  {codeline ? (
-                    <div className="relative">
-                      <Textarea
-                        readOnly
-                        value={codeline}
-                        className="mb-4"
-                      />
-                      <Button
-                        onClick={handleCopyToClipboard}
-                        className="absolute top-2 right-2"
-                      >
-                        <Copy className="h-4 w-4 mr-2"/>
-                        Copy to Clipboard
-                      </Button>
-                    </div>
-                  ) : (
-                    <p>No codeline generated yet. Please input graft data.</p>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-          )}
-
-          <TabsContent value="workbook-interface" className="outline-none">
-            <Card>
-              <CardHeader>
-                <CardTitle>Workbook Interface</CardTitle>
-                <CardDescription>Ask/brainstorm/revise with the coordinator.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p>This feature is under development.</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="code-creation" className="outline-none">
-            <Card>
-              <CardHeader>
-                <CardTitle>Code Creation</CardTitle>
-                <CardDescription>Direct link to an idx repo with the code structure and options to copy the generated code.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p>This feature is under development.</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="middleware" className="outline-none">
-            <Card>
-              <CardHeader>
-                <CardTitle>Middleware</CardTitle>
-                <CardDescription>Coordinator manipulating Google ADK and building AUTOGEN bot.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p>This feature is under development.</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="fluffer-front-end" className="outline-none">
-            <Card>
-              <CardHeader>
-                <CardTitle>Fluffer Front-End</CardTitle>
-                <CardDescription>Drag and drop/slide/edit/move/combine UI elements.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p>This feature is under development.</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      )}
-            <Button onClick={handleFetchError}>
-              Test Error Fetching Server
+       {currentStep === 2 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Step 2: Configure the Swarm</CardTitle>
+            <CardDescription>
+              Provide specific configuration details for the builders and configurators. Specify resource allocation, target environments (e.g., Google Cloud regions), and security constraints.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-4">
+            <Textarea
+              placeholder="Enter configuration details: resource needs, target platforms (GCP, Docker), security rules, specific tools..."
+              value={swarmConfig}
+              onChange={(e) => setSwarmConfig(e.target.value)}
+              rows={10}
+            />
+            <Button onClick={handleConfigureSwarm} disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  Configuring Swarm <Loader2 className="ml-2 h-4 w-4 animate-spin" />
+                </>
+              ) : (
+                "Configure Swarm & Activate Hub"
+              )}
             </Button>
+             <Button variant="outline" onClick={() => setCurrentStep(1)}>
+              Back to Project Definition
+            </Button>
+          </CardContent>
+        </Card>
+      )}
+
+
+      {currentStep >= 3 && (
+        <>
+           <Card>
+            <CardHeader>
+              <CardTitle>EbaAaZ: Swarm Coordinator</CardTitle>
+              <CardDescription>
+                 Leveraging Google Cloud's infrastructure and AI, EbaAaZ orchestrates a distributed swarm of builders and configurators, optimizing workflows and accelerating development, inspired by Incredibuild but tailored for the SeCuReDmE ecosystem. Manage and monitor coordinated tasks below.
+                 <div className="mt-2">
+                    <Button variant="outline" size="sm" onClick={() => setCurrentStep(1)}>Redefine Project</Button>
+                    <Button variant="outline" size="sm" className="ml-2" onClick={() => setCurrentStep(2)}>Reconfigure Swarm</Button>
+                 </div>
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Tabs defaultValue="workbook-interface">
+            <TabsList className="mb-4">
+              <TabsTrigger value="workbook-interface" className="tab-label">Workbook Interface</TabsTrigger>
+              <TabsTrigger value="code-creation" className="tab-label">Code Creation</TabsTrigger>
+              <TabsTrigger value="middleware" className="tab-label">Middleware</TabsTrigger>
+              <TabsTrigger value="fluffer-front-end" className="tab-label">Fluffer Front-End</TabsTrigger>
+               {/* Add more relevant tabs for coordination */}
+               <TabsTrigger value="deployment" className="tab-label">Deployment</TabsTrigger>
+               <TabsTrigger value="monitoring" className="tab-label">Monitoring</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="workbook-interface" className="outline-none">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Workbook Interface</CardTitle>
+                  <CardDescription>Collaborate with the EbaAaZ coordinator: ask questions, brainstorm solutions, or revise project parameters and swarm configurations.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Textarea placeholder="Interact with the coordinator..." rows={5} />
+                   <Button className="mt-2">Send Query</Button>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="code-creation" className="outline-none">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Code Generation & Integration</CardTitle>
+                  <CardDescription>View generated code snippets, manage code repositories (e.g., Cloud Source Repositories), and integrate components orchestrated by the swarm.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p>Code generation and repository links will appear here.</p>
+                  {/* Placeholder for generated code display or links */}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="middleware" className="outline-none">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Middleware Orchestration</CardTitle>
+                  <CardDescription>Configure and monitor middleware components (e.g., Pub/Sub, Apigee) managed by the EbaAaZ swarm. View connections and data flows.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                   <p>Middleware status and configuration options will appear here.</p>
+                  {/* Placeholder for middleware status */}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="fluffer-front-end" className="outline-none">
+              <Card>
+                <CardHeader>
+                  <CardTitle>UI Assembly (Fluffer Front-End)</CardTitle>
+                  <CardDescription>Coordinate the assembly and deployment of UI elements. Drag, drop, configure, and preview front-end components built by the swarm.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                   <p>UI component assembly and preview tools will be available here.</p>
+                  {/* Placeholder for UI builder/preview */}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+             <TabsContent value="deployment" className="outline-none">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Deployment Coordination</CardTitle>
+                  <CardDescription>Manage deployments to Google Cloud services (e.g., Cloud Run, GKE, App Engine) orchestrated by EbaAaZ. Track rollout status and manage versions.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                   <p>Deployment status and controls will appear here.</p>
+                   {/* Placeholder for deployment controls */}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+             <TabsContent value="monitoring" className="outline-none">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Swarm Monitoring</CardTitle>
+                  <CardDescription>Monitor the health and performance of the builder/configurator swarm. View resource utilization, task progress, and logs (e.g., via Cloud Logging/Monitoring).</CardDescription>
+                </CardHeader>
+                <CardContent>
+                   <p>Real-time monitoring dashboards and logs will be displayed here.</p>
+                   {/* Placeholder for monitoring dashboards */}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+          </Tabs>
+        </>
+      )}
     </div>
   );
 };
