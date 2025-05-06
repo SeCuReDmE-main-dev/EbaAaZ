@@ -153,49 +153,65 @@ a:hover {
 
 @layer base {
   :root {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 45 100% 50%;
-    --primary-foreground: 0 0% 0%;
-    --secondary: 240 4.8% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 4.8% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 45 100% 50%;
-    --accent-foreground: 0 0% 0%;
-    --destructive: 0 72.2% 50.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 10%;
-    --input: 240 5.9% 10%;
-    --ring: 0 0% 98%;
+    --background: 222.2 84% 4.9%; /* Deep Blue */
+    --foreground: 210 40% 98%; /* Soft White */
+
+    --card: 222.2 84% 4.9%; /* Deep Blue */
+    --card-foreground: 210 40% 98%; /* Soft White */
+
+    --popover: 222.2 84% 4.9%; /* Deep Blue */
+    --popover-foreground: 210 40% 98%; /* Soft White */
+
+    --primary: 26.1 94.8% 58.2%; /* Orange */
+    --primary-foreground: 210 40% 98%; /* Soft White */
+
+    --secondary: 214.3 45.2% 26.5%; /* Metallic Silver */
+    --secondary-foreground: 210 40% 98%; /* Soft White */
+
+    --muted: 214.3 45.2% 26.5%; /* Metallic Silver */
+    --muted-foreground: 215 20.2% 65.1%; /* Lighter Grey for muted text */
+
+    --accent: 174.5 100% 34.1%; /* Teal */
+    --accent-foreground: 210 40% 98%; /* Soft White */
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 45.2% 26.5%; /* Metallic Silver */
+    --input: 214.3 45.2% 26.5%; /* Metallic Silver */
+    --ring: 26.1 94.8% 58.2%; /* Orange */
+
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-        --primary: 45 100% 50%;
-    --primary-foreground: 0 0% 0%;
-    --secondary: 240 4.8% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 4.8% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 45 100% 50%;
-    --accent-foreground: 0 0% 0%;
+    --background: 222.2 84% 4.9%; /* Deep Blue */
+    --foreground: 210 40% 98%; /* Soft White */
+
+    --card: 222.2 84% 4.9%; /* Deep Blue */
+    --card-foreground: 210 40% 98%; /* Soft White */
+
+    --popover: 222.2 84% 4.9%; /* Deep Blue */
+    --popover-foreground: 210 40% 98%; /* Soft White */
+
+    --primary: 26.1 94.8% 58.2%; /* Orange */
+    --primary-foreground: 210 40% 98%; /* Soft White */
+
+    --secondary: 214.3 45.2% 26.5%; /* Metallic Silver */
+    --secondary-foreground: 210 40% 98%; /* Soft White */
+
+    --muted: 214.3 45.2% 26.5%; /* Metallic Silver */
+    --muted-foreground: 215 20.2% 65.1%; /* Lighter Grey for muted text */
+
+    --accent: 174.5 100% 34.1%; /* Teal */
+    --accent-foreground: 210 40% 98%; /* Soft White */
+
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 20% 98%;
-    --border: 240 5.9% 10%;
-    --input: 240 5.9% 10%;
-    --ring: 0 0% 98%;
-    --radius: 0.5rem;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 45.2% 26.5%; /* Metallic Silver */
+    --input: 214.3 45.2% 26.5%; /* Metallic Silver */
+    --ring: 26.1 94.8% 58.2%; /* Orange */
   }
 }
 
@@ -321,4 +337,21 @@ a:active {
 
 .item:hover {
   transform: translateY(-10px);
+}
+
+
+/* Page Transition Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
 }
