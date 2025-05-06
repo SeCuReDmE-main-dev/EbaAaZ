@@ -1,16 +1,22 @@
+
 "use client";
 
-import { useState, ChangeEvent } from 'react';
+import { useState } from 'react';
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { MessageSquare, BookOpen, Settings, FileCog, UploadCloud, Play, Save, UserCircle, Bell } from "lucide-react";
+import { GeminiChatSpace } from '@/components/gemini-chat-space';
+import Link from 'next/link';
+import type { ChangeEvent } from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Save, UserCircle, Settings2, Bell, FileCog, UploadCloud, Play } from "lucide-react";
 
-const HumanHubSettingsPage = () => {
+
+const HumanHubPage = () => {
+  const [showGeminiChat, setShowGeminiChat] = useState(false);
   const { toast } = useToast();
   const [displayName, setDisplayName] = useState("EbaAaZ User");
   const [darkMode, setDarkMode] = useState(true);
@@ -77,30 +83,13 @@ const HumanHubSettingsPage = () => {
       description: `Processing ${graftFile.name}...`,
     });
 
-    // Placeholder for actual graft file processing logic
-    // This could involve reading the file content, parsing YAML,
-    // and interacting with a backend or Genkit flow.
     try {
-      // const fileContent = await graftFile.text();
-      // console.log("Graft file content:", fileContent);
-      // Simulate processing delay
       await new Promise(resolve => setTimeout(resolve, 2000));
-
-      // Example: Simulate a call to a Genkit flow
-      // const result = await processGraftFlow({fileName: graftFile.name, content: fileContent });
-      // console.log("Graft processing result:", result);
-
       toast({
         title: "Graft File Processed",
         description: `${graftFile.name} has been processed successfully. (Simulated)`,
         variant: "default",
       });
-      // Reset file input after successful processing if needed
-      // setGraftFile(null);
-      // setGraftFileName("");
-      // const fileInput = document.getElementById('graftFileInput') as HTMLInputElement;
-      // if (fileInput) fileInput.value = "";
-
     } catch (error) {
       console.error("Error processing graft file:", error);
       toast({
@@ -115,10 +104,48 @@ const HumanHubSettingsPage = () => {
 
 
   return (
-    <div className="container mx-auto p-4 flex flex-col gap-6 page-fade-in text-center">
-      <h1 className="text-4xl font-bold text-center mb-6" style={{ color: 'var(--primary)' }}>
-        Human Hub Settings
+    <div className="container mx-auto p-4 flex flex-col items-center gap-6 page-fade-in text-center">
+      <h1 className="text-4xl font-bold mb-6" style={{ color: 'var(--primary)' }}>
+        EbaAaZ
       </h1>
+
+      <Card className="w-full max-w-3xl shadow-lg border-primary">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl font-semibold" style={{ color: 'var(--primary-foreground)' }}>
+            The Protector of Fortitude
+          </CardTitle>
+          <CardDescription style={{ color: 'var(--muted-foreground)' }} className="text-center">
+            Welcome to EbaAaZ, the Architect of Integration within the SeCuReDmE framework.
+            EbaAaZ embodies a mind that seamlessly connects logic, creativity, and ethical responsibility,
+            safeguarding our digital ecosystem.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4 text-sm text-center" style={{ color: 'var(--muted-foreground)' }}>
+          <p>
+            EbaAaZ's primary role is to ensure the stability and security of backend and middleware through secure tunneling and advanced technologies. He initiates automated processes, manages quantum computing resources, and integrates diverse AI models, all guided by an unwavering commitment to ethical principles.
+          </p>
+          <p>
+            The SeCuReDmE vision aims for equilibrium in societal regulation through observational constructivism and effective compensation. It envisions a future where technology uplifts, empowers, and creates a more balanced and ethical digital world. Key personas like CeLeBrUm (collective intelligence) and SenNnT-i (compassionate observer) work alongside EbaAaZ to achieve this vision.
+          </p>
+        </CardContent>
+      </Card>
+
+      <div className="flex flex-col sm:flex-row gap-4 mt-6 justify-center">
+        <Button onClick={() => setShowGeminiChat(true)} className="bg-accent hover:bg-accent/90 text-accent-foreground">
+          <MessageSquare className="mr-2 h-5 w-5" /> Open Gemini Chat
+        </Button>
+        <Link href="/resources-hub" passHref>
+          <Button variant="outline">
+            <BookOpen className="mr-2 h-5 w-5" /> Explore Resources Hub
+          </Button>
+        </Link>
+      </div>
+      
+      {showGeminiChat && <GeminiChatSpace onClose={() => setShowGeminiChat(false)} />}
+
+      <h2 className="text-3xl font-bold mt-12 mb-6" style={{ color: 'var(--primary)' }}>
+        Human Hub Configuration
+      </h2>
 
       <Card className="w-full max-w-3xl mx-auto shadow-lg border-primary text-left">
         <CardHeader className="text-center">
@@ -132,9 +159,9 @@ const HumanHubSettingsPage = () => {
         <CardContent className="space-y-8">
           {/* User Profile Settings */}
           <section>
-            <h2 className="text-xl font-semibold mb-4 flex items-center justify-center" style={{ color: 'var(--secondary-foreground)' }}>
+            <h3 className="text-xl font-semibold mb-4 flex items-center justify-center" style={{ color: 'var(--secondary-foreground)' }}>
               <UserCircle className="mr-2 h-6 w-6" /> User Profile
-            </h2>
+            </h3>
             <div className="space-y-4">
               <div>
                 <Label htmlFor="displayName" className="text-sm font-medium text-left block mb-1">Display Name</Label>
@@ -161,9 +188,9 @@ const HumanHubSettingsPage = () => {
 
           {/* Swarm Configuration Settings */}
           <section>
-            <h2 className="text-xl font-semibold mb-4 flex items-center justify-center" style={{ color: 'var(--secondary-foreground)' }}>
-              <Settings2 className="mr-2 h-6 w-6" /> Swarm Configuration
-            </h2>
+            <h3 className="text-xl font-semibold mb-4 flex items-center justify-center" style={{ color: 'var(--secondary-foreground)' }}>
+              <Settings className="mr-2 h-6 w-6" /> Swarm Configuration
+            </h3>
             <div className="space-y-4">
               <div>
                 <Label htmlFor="numWorkers" className="text-sm font-medium text-left block mb-1">Default Number of Workers</Label>
@@ -190,9 +217,9 @@ const HumanHubSettingsPage = () => {
 
           {/* Notification Settings */}
           <section>
-            <h2 className="text-xl font-semibold mb-4 flex items-center justify-center" style={{ color: 'var(--secondary-foreground)' }}>
+            <h3 className="text-xl font-semibold mb-4 flex items-center justify-center" style={{ color: 'var(--secondary-foreground)' }}>
               <Bell className="mr-2 h-6 w-6" /> Notification Settings
-            </h2>
+            </h3>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <Label htmlFor="emailNotifications" className="text-sm font-medium">Email Notifications</Label>
@@ -221,9 +248,9 @@ const HumanHubSettingsPage = () => {
 
           {/* Role & Permission Graft Configuration */}
           <section>
-            <h2 className="text-xl font-semibold mb-4 flex items-center justify-center" style={{ color: 'var(--secondary-foreground)' }}>
+            <h3 className="text-xl font-semibold mb-4 flex items-center justify-center" style={{ color: 'var(--secondary-foreground)' }}>
               <FileCog className="mr-2 h-6 w-6" /> Role & Permission Graft Configuration
-            </h2>
+            </h3>
             <div className="space-y-4">
               <div>
                 <Label htmlFor="graftFileInput" className="text-sm font-medium text-left block mb-1">
@@ -264,8 +291,11 @@ const HumanHubSettingsPage = () => {
           </div>
         </CardContent>
       </Card>
+
     </div>
   );
 };
 
-export default HumanHubSettingsPage;
+export default HumanHubPage;
+
+    

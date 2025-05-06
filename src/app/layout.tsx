@@ -12,7 +12,7 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: 'EbaAaZ - Human Hub', 
+  title: 'EbaAaZ - The Protector of Fortitude', 
   description: 'Configuration and Integration Hub powered by SeCuReDmE',
 };
 
@@ -25,7 +25,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${roboto.className} text-center`}>
         <header className="header sticky top-0 z-50 w-full border-b backdrop-blur">
-          <div className="container flex h-14 items-center header-menu">
+          <div className="container flex h-14 items-center header-menu justify-center sm:justify-start">
              <Link href="/" className="mr-6 flex items-center space-x-2" style={{ margin: '0 10px' }}>
                 <span className="font-bold">EbaAaZ</span>
             </Link>
@@ -48,5 +48,7 @@ export default function RootLayout({
     </html>
   );
 }
+
+    
 
     
