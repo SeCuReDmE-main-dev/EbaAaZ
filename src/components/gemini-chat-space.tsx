@@ -85,13 +85,13 @@ export const GeminiChatSpace: React.FC<GeminiChatSpaceProps> = ({ onClose }) => 
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 page-fade-in">
-      <Card className="w-full max-w-2xl h-[80vh] flex flex-col shadow-2xl border-primary">
+      <Card className="w-full max-w-2xl h-[80vh] flex flex-col shadow-2xl border-primary text-center">
         <CardHeader className="flex flex-row items-center justify-between p-4 border-b">
-          <CardTitle className="text-lg font-semibold flex items-center">
+          <CardTitle className="text-lg font-semibold flex items-center text-center w-full justify-center">
             <Bot className="mr-2 h-6 w-6 text-primary" />
             Gemini Chat Space
           </CardTitle>
-          <Button variant="ghost" size="icon" onClick={onClose} aria-label="Close chat">
+          <Button variant="ghost" size="icon" onClick={onClose} aria-label="Close chat" className="absolute right-4 top-4">
             <X className="h-5 w-5" />
           </Button>
         </CardHeader>
@@ -110,7 +110,7 @@ export const GeminiChatSpace: React.FC<GeminiChatSpaceProps> = ({ onClose }) => 
                   {msg.sender === 'user' && <User className="h-6 w-6 text-secondary-foreground flex-shrink-0 mb-1" />}
                   <div
                     className={cn(
-                      'p-3 rounded-lg shadow',
+                      'p-3 rounded-lg shadow text-left', // Message content should be left-aligned typically
                       msg.sender === 'user'
                         ? 'bg-primary text-primary-foreground'
                         : 'bg-secondary text-secondary-foreground'
@@ -124,7 +124,7 @@ export const GeminiChatSpace: React.FC<GeminiChatSpaceProps> = ({ onClose }) => 
                 </div>
               ))}
               {isLoading && (
-                <div className="flex items-center justify-start space-x-2">
+                <div className="flex items-center justify-center space-x-2"> {/* Centered loading indicator */}
                    <Bot className="h-6 w-6 text-primary flex-shrink-0" />
                   <Loader2 className="h-5 w-5 animate-spin text-primary" />
                   <span className="text-sm text-muted-foreground">Gemini is thinking...</span>
@@ -140,7 +140,7 @@ export const GeminiChatSpace: React.FC<GeminiChatSpaceProps> = ({ onClose }) => 
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type your message to Gemini..."
               rows={1}
-              className="flex-grow resize-none min-h-[40px] max-h-[120px] bg-card border-input text-card-foreground focus:ring-primary"
+              className="flex-grow resize-none min-h-[40px] max-h-[120px] bg-card border-input text-card-foreground focus:ring-primary text-left" // Textarea text left-aligned
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
                   e.preventDefault();

@@ -78,8 +78,7 @@ const GithubMCPServerPage = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      // Assuming the structure is { "reference": [ { "id": "...", "name": "...", "description": "..." } ], "third-party": { "official": [...], "community": [...] } }
-      // We need to extract options from all relevant sections.
+      
       const options: McpOption[] = [];
 
       if (data.reference && Array.isArray(data.reference)) {
@@ -137,7 +136,7 @@ const GithubMCPServerPage = () => {
         try {
             const hashed = await hashToken(envToken);
             setHashedToken(hashed);
-            localStorage.setItem('githubHashedToken', hashed); // Store the hashed version
+            localStorage.setItem('githubHashedToken', hashed); 
             setIsTokenSetup(true);
         } catch (err) {
             setError('Error hashing the environment token.');
@@ -146,10 +145,7 @@ const GithubMCPServerPage = () => {
       } else if (storedHashedToken) {
         setHashedToken(storedHashedToken);
         setIsTokenSetup(true);
-        // Raw token is not available, so we can't validate it here directly
-        // but we know it was manually set up.
       } else {
-        // No token found, prompt user.
         setOpenDialog(true);
       }
     };
@@ -159,7 +155,7 @@ const GithubMCPServerPage = () => {
 
 
   useEffect(() => {
-    if (isTokenSetup && githubToken) { // Only validate if the raw token is available (from env or newly submitted)
+    if (isTokenSetup && githubToken) { 
       const checkTokenValidity = async () => {
         try {
           const expiryDays = await calculateTokenExpiry(githubToken);
@@ -172,9 +168,6 @@ const GithubMCPServerPage = () => {
       };
       checkTokenValidity();
     } else if (isTokenSetup && !githubToken && hashedToken) {
-        // Token was set up (manually entered previously) but raw token isn't in state
-        // We can't validate it here without the raw token.
-        // Assume valid or use a stored expiry if implemented. For now, default to 30 days.
         setTokenExpiryDays(30);
     }
   }, [githubToken, isTokenSetup, hashedToken, calculateTokenExpiry]);
@@ -186,15 +179,15 @@ const GithubMCPServerPage = () => {
         if (tokenExpiryDays <= 0) {
           setServerStatusColor('bg-destructive animate-pulse');
         } else if (tokenExpiryDays <= 7) {
-          setServerStatusColor('bg-primary'); // Orange
+          setServerStatusColor('bg-primary'); 
         } else {
-          setServerStatusColor('bg-green-500'); // Bright Green
+          setServerStatusColor('bg-green-500'); 
         }
       };
       updateStatusColor();
       const intervalId = setInterval(() => {
         setTokenExpiryDays(prevDays => (prevDays ? Math.max(0, prevDays - 1) : 0));
-      }, 24 * 60 * 60 * 1000); // Update once a day
+      }, 24 * 60 * 60 * 1000); 
       return () => clearInterval(intervalId);
     }
   }, [tokenExpiryDays]);
@@ -208,11 +201,11 @@ const GithubMCPServerPage = () => {
       const hashed = await hashToken(tempToken);
       setHashedToken(hashed);
       localStorage.setItem('githubHashedToken', hashed);
-      setGithubToken(tempToken); // Store the actual token for current session validation
+      setGithubToken(tempToken); 
       setIsTokenSetup(true);
       setOpenDialog(false);
       setError(null);
-      const expiryDays = await calculateTokenExpiry(tempToken); // Validate the newly submitted token
+      const expiryDays = await calculateTokenExpiry(tempToken); 
       setTokenExpiryDays(expiryDays);
     } catch (err) {
       setError('Error processing the token.');
@@ -234,18 +227,18 @@ const GithubMCPServerPage = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 page-fade-in">
-      <h1 className="text-2xl font-bold mb-4">
+    <div className="container mx-auto p-4 page-fade-in text-center">
+      <h1 className="text-2xl font-bold mb-4 text-center">
         MCP Server Configuration
       </h1>
 
-      {error && !openDialog && <div className="text-destructive mb-4">Error: {error}</div>}
+      {error && !openDialog && <div className="text-destructive mb-4 text-center">Error: {error}</div>}
 
       <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>GitHub Token Required</AlertDialogTitle>
-              <AlertDialogDescription>
+          <AlertDialogContent className="text-center">
+            <AlertDialogHeader className="text-center">
+              <AlertDialogTitle className="text-center">GitHub Token Required</AlertDialogTitle>
+              <AlertDialogDescription className="text-center">
                 To use the MCP Server, you need to provide a GitHub Personal Access Token.
                 This token will be hashed and stored locally in your browser.
                 <br/>
@@ -260,7 +253,7 @@ const GithubMCPServerPage = () => {
               </AlertDialogDescription>
             </AlertDialogHeader>
             <div className="grid gap-4 py-4">
-                <div className="grid gap-2">
+                <div className="grid gap-2 text-left"> {/* Label is typically left-aligned */}
                     <Label htmlFor="token">GitHub Token</Label>
                     <Input
                     type="password"
@@ -271,7 +264,7 @@ const GithubMCPServerPage = () => {
                     />
                 </div>
             </div>
-            <AlertDialogFooter>
+            <AlertDialogFooter className="sm:justify-center"> {/* Center footer buttons */}
                 <AlertDialogCancel onClick={() => {setOpenDialog(false); if(!isTokenSetup) setError('Token setup cancelled. MCP functionality may be limited.')}}>Cancel</AlertDialogCancel>
               <AlertDialogAction onClick={handleTokenSubmit}>
                 Submit Token
@@ -281,7 +274,7 @@ const GithubMCPServerPage = () => {
         </AlertDialog>
 
       {isTokenSetup && hashedToken && (
-        <div className="mt-4 p-3 bg-muted rounded-md">
+        <div className="mt-4 p-3 bg-muted rounded-md text-center">
           <p className="text-sm">
             Stored Hashed Token (SHA-256):{' '}
             <span className="font-mono break-all text-xs">{hashedToken.substring(0,10)}...</span>
@@ -289,7 +282,7 @@ const GithubMCPServerPage = () => {
         </div>
       )}
 
-      <div className="mt-6 flex items-center gap-4">
+      <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
         <Button
           className={cn(serverStatusColor, "text-primary-foreground font-bold py-2 px-4 rounded hover:opacity-90")}
           onClick={toggleMCPActivation}
@@ -297,7 +290,7 @@ const GithubMCPServerPage = () => {
           {isMCPActive ? 'Deactivate MCP Server' : 'Activate MCP Server'}
         </Button>
         {isTokenSetup && tokenExpiryDays !== null && (
-          <p className="text-sm">
+          <p className="text-sm text-center">
             Token Validity: {tokenExpiryDays} days remaining
           </p>
         )}
@@ -313,17 +306,17 @@ const GithubMCPServerPage = () => {
               MCP Options
             </Button>
           </SheetTrigger>
-          <SheetContent className="sm:max-w-md">
-            <SheetHeader>
-              <SheetTitle>MCP Server Options</SheetTitle>
-              <SheetDescription>
+          <SheetContent className="sm:max-w-md text-center">
+            <SheetHeader className="text-center">
+              <SheetTitle className="text-center">MCP Server Options</SheetTitle>
+              <SheetDescription className="text-center">
                 Select your preferred mode and options for the MCP Server.
               </SheetDescription>
             </SheetHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
-                <Label htmlFor="mode">Mode:</Label>
-                <div className="flex gap-2">
+                <Label htmlFor="mode" className="text-center">Mode:</Label>
+                <div className="flex gap-2 justify-center">
                   <Button
                     variant={mcpMode === 'cli' ? 'default' : 'outline'}
                     onClick={() => handleMcpModeChange('cli')}
@@ -342,37 +335,37 @@ const GithubMCPServerPage = () => {
               </div>
 
               <div className="grid gap-2">
-                <Label>Available MCP Modules:</Label>
+                <Label className="text-center">Available MCP Modules:</Label>
                 {mcpOptions.length > 0 ? mcpOptions.map((option) => (
-                  <Button key={option.id} variant="ghost" className="justify-start text-left h-auto py-2">
+                  <Button key={option.id} variant="ghost" className="justify-center text-center h-auto py-2">
                     <div>
                         <p className="font-semibold">{option.label}</p>
                         <p className="text-xs text-muted-foreground">{option.description}</p>
                     </div>
                   </Button>
-                )) : <p className="text-sm text-muted-foreground">No MCP modules found or failed to load.</p>}
+                )) : <p className="text-sm text-muted-foreground text-center">No MCP modules found or failed to load.</p>}
               </div>
             </div>
           </SheetContent>
         </Sheet>
       )}
 
-      <Card className="mt-8">
-        <CardHeader>
-          <CardTitle>About MCP Server Integration</CardTitle>
+      <Card className="mt-8 text-center">
+        <CardHeader className="text-center">
+          <CardTitle className="text-center">About MCP Server Integration</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 text-center">
             <p>
-                The Model Context Protocol (MCP) Server integration allows EbaAaZ Hub
+                The Model Context Protocol (MCP) Server integration allows EbaAaZ
                 to connect with various external tools and services, enabling advanced
                 automation and interaction capabilities. This page facilitates the configuration
                 and activation of these connections using necessary credentials, like a GitHub Personal Access Token for GitHub-related MCPs.
             </p>
             <section>
-            <h3 className="text-lg font-semibold mb-2">
+            <h3 className="text-lg font-semibold mb-2 text-center">
             General Use Cases for MCPs
             </h3>
-            <ul className="list-disc pl-5 space-y-1 text-sm">
+            <ul className="list-disc pl-5 space-y-1 text-sm text-left sm:text-center sm:list-inside"> {/* Adjusted for centering */}
             <li>Automating workflows across different platforms.</li>
             <li>Extracting and analyzing data from various sources (e.g., Git repositories, APIs, databases).</li>
             <li>
@@ -384,10 +377,10 @@ const GithubMCPServerPage = () => {
         </section>
 
         <section>
-            <h3 className="text-lg font-semibold mb-2">
+            <h3 className="text-lg font-semibold mb-2 text-center">
             Prerequisites for GitHub MCP
             </h3>
-            <p className="text-sm">
+            <p className="text-sm text-center">
             For GitHub-specific MCPs, you will typically need to create a GitHub Personal Access Token with appropriate scopes (e.g., `repo`, `workflow`, `user`).
             Other MCPs might require different authentication methods or API keys.
             </p>
@@ -396,15 +389,15 @@ const GithubMCPServerPage = () => {
       </Card>
 
 
-      <section className="mt-6 p-4 border rounded-md bg-card">
-        <h2 className="text-xl font-semibold mb-3">
+      <section className="mt-6 p-4 border rounded-md bg-card text-center">
+        <h2 className="text-xl font-semibold mb-3 text-center">
           General MCP Configuration Guide (Example for GitHub)
         </h2>
-        <p className="text-sm mb-2">
+        <p className="text-sm mb-2 text-center">
           To manually configure an MCP server (like the GitHub MCP Server) with VS Code, you might add something similar to the following to your User Settings (JSON) or a workspace `.vscode/mcp.json` file.
           The exact configuration depends on the specific MCP server.
         </p>
-        <pre className="p-3 rounded-md bg-muted overflow-x-auto text-xs">
+        <pre className="p-3 rounded-md bg-muted overflow-x-auto text-xs text-left"> {/* Preformatted text usually left-aligned */}
           <code>
             {`
 // Example for User Settings (settings.json) for a GitHub MCP
@@ -441,7 +434,7 @@ const GithubMCPServerPage = () => {
             `}
           </code>
         </pre>
-         <p className="text-sm mt-4 mb-2">
+         <p className="text-sm mt-4 mb-2 text-center">
           Ensure your tokens and sensitive credentials are securely managed. For this application, GitHub tokens are hashed and stored locally if entered through the UI. Environment variables (e.g., `NEXT_PUBLIC_GITHUB_TOKEN` in a `.env.local` file) are another common method, but ensure `.env.local` is in your `.gitignore`.
         </p>
       </section>

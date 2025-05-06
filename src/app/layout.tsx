@@ -1,15 +1,14 @@
 
 import type {Metadata} from 'next';
-import { Playfair_Display } from 'next/font/google'; // Changed from Inter to Playfair_Display
+import { Inter } from 'next/font/google'; // Reverted to Inter as Playfair_Display was causing issues
 import './globals.css';
 import Link from 'next/link';
 import { Toaster } from "@/components/ui/toaster"; 
 
-// Configure Playfair Display with desired subsets and weights
-const playfair = Playfair_Display({ 
+// Configure Inter with desired subsets and weights
+const inter = Inter({ 
   subsets: ['latin'],
-  style: ['italic', 'normal'], // Added 'normal' for non-italic uses if needed
-  weight: ['400', '700', '900'] // Added more weights for flexibility
+  weight: ['400', '700'] 
 });
 
 export const metadata: Metadata = {
@@ -24,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={playfair.className}> {/* Applied Playfair Display class */}
+      <body className={`${inter.className} text-center`}> {/* Applied Inter class and text-center */}
         <header className="header sticky top-0 z-50 w-full border-b backdrop-blur">
           <div className="container flex h-14 items-center header-menu">
              <Link href="/" className="mr-6 flex items-center space-x-2" style={{ margin: '0 10px' }}>
@@ -40,7 +39,7 @@ export default function RootLayout({
          <Toaster /> 
         <footer className="footer py-6 md:px-8 md:py-0 border-t">
            <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
-             <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
+             <p className="text-center text-sm leading-loose text-muted-foreground md:text-center"> {/* Changed md:text-left to md:text-center */}
                 &copy; {new Date().getFullYear()} EbaAaZ - SeCuReDmE Initiative.
              </p>
            </div>
