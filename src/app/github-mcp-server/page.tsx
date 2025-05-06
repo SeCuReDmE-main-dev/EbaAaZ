@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, {useState, useEffect, useCallback} from 'react';
@@ -71,8 +72,8 @@ const GithubMCPServerPage = () => {
 
   const fetchMcpOptions = useCallback(async () => {
     try {
-      // Use the canonical URL for servers.json
-      const response = await fetch("https://raw.githubusercontent.com/modelcontextprotocol/servers/main/servers.json");
+      // Use the canonical URL for servers.json from mcp-hub-data
+      const response = await fetch("https://raw.githubusercontent.com/modelcontextprotocol/mcp-hub-data/main/servers.json");
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
