@@ -28,13 +28,13 @@ export default function RootLayout({
                 <span className="font-bold">EbaAaZ Hub</span>
             </Link>
              <nav className="flex items-center space-x-6 text-sm font-medium">
-                <Link href="/" style={{ margin: '0 10px' }}>Human hub</Link>
+                <Link href="/" style={{ margin: '0 10px' }}>Human Hub</Link>
                 <Link href="/github-mcp-server" style={{ margin: '0 10px' }}>MCP Server</Link>
                  {/* Add other primary navigation links here */}
              </nav>
           </div>
         </header>
-        <main className="flex-1 page-fade-in">{children}</main> {/* Ensure main content area is flexible */}
+        <main className="flex-1">{children}</main> {/* Ensure main content area is flexible */}
          <Toaster /> {/* Add Toaster component here */}
         <footer className="footer py-6 md:px-8 md:py-0 border-t">
            <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
