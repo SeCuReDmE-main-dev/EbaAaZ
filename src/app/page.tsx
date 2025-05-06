@@ -6,19 +6,18 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useToast } from "@/hooks/use-toast"; // Corrected import path
-import { Loader2 } from "lucide-react";
-// Keep AI flow imports for potential future use if needed, but they are not used in the current logic
-// import { generatePodcastSummary } from "@/ai/flows/podcast-summary";
-// import { graftToCode } from "@/ai/flows/graft-to-code-conversion";
-import { generateFfeDValue, generateECCResult, createSecretOrb } from "@/lib/utils"; // Import helper functions
+import { useToast } from "@/hooks/use-toast";
+import { Loader2, MessageSquare } from "lucide-react";
+import { generateFfeDValue, generateECCResult, createSecretOrb } from "@/lib/utils";
+import { GeminiChatSpace } from '@/components/gemini-chat-space'; // Import GeminiChatSpace
 
 const Home = () => {
   const [projectDefinition, setProjectDefinition] = useState('');
   const [swarmConfig, setSwarmConfig] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const [currentStep, setCurrentStep] = useState(1); // Start at step 1
+  const [currentStep, setCurrentStep] = useState(1);
+  const [isChatSpaceOpen, setIsChatSpaceOpen] = useState(false); // State for chat space
 
   const handleDefineProject = async () => {
     if (!projectDefinition) {
@@ -32,22 +31,16 @@ const Home = () => {
     setIsLoading(true);
 
     try {
-      // Simulate processing project definition
       await new Promise(resolve => setTimeout(resolve, 1500));
-
-      // --- FfeD, Action, ECC Integration ---
       const action = 'define_project';
       const ffedValue = generateFfeDValue();
       const eccResult = await generateECCResult(projectDefinition);
       const secretOrb = createSecretOrb(action, ffedValue, eccResult);
-      // --- End Integration ---
 
       toast({
         title: "Project Defined",
         description: "Project scope has been processed. Ready for configuration.",
       });
-
-      // Display the "secret orb" data in another toast for demonstration
       toast({
           title: "Secret Orb Generated (Define Project)",
           description: (
@@ -55,11 +48,9 @@ const Home = () => {
               <code className="text-white">{JSON.stringify(secretOrb, null, 2)}</code>
             </pre>
           ),
-          duration: 9000, // Keep toast longer
+          duration: 9000,
         });
-
-
-      setCurrentStep(2); // Move to the next step
+      setCurrentStep(2);
     } catch (error) {
        console.error("Error during project definition:", error);
        toast({
@@ -84,23 +75,16 @@ const Home = () => {
     setIsLoading(true);
 
     try {
-        // Simulate configuring the swarm
         await new Promise(resolve => setTimeout(resolve, 1500));
-
-        // --- FfeD, Action, ECC Integration ---
         const action = 'configure_swarm';
         const ffedValue = generateFfeDValue();
         const eccResult = await generateECCResult(swarmConfig);
         const secretOrb = createSecretOrb(action, ffedValue, eccResult);
-        // --- End Integration ---
-
 
         toast({
           title: "Swarm Configured",
           description: "Builder and configurator swarm is ready. Proceed to Hub.",
         });
-
-        // Display the "secret orb" data
          toast({
           title: "Secret Orb Generated (Configure Swarm)",
           description: (
@@ -110,8 +94,7 @@ const Home = () => {
           ),
           duration: 9000,
         });
-
-        setCurrentStep(3); // Move to the main Hub view
+        setCurrentStep(3);
     } catch(error) {
          console.error("Error during swarm configuration:", error);
          toast({
@@ -127,12 +110,10 @@ const Home = () => {
 
   return (
     <div className="container mx-auto p-4 flex flex-col gap-4">
-       {/* Title remains EbaAaZ Hub */}
       <h1 className="text-3xl font-bold text-center mb-6" style={{ color: 'var(--primary)' }}>EbaAaZ Hub</h1>
 
-
       {currentStep === 1 && (
-        <Card className="w-full max-w-2xl mx-auto shadow-lg border-primary">
+        <Card className="w-full max-w-2xl mx-auto shadow-lg page-fade-in border-primary">
           <CardHeader>
             <CardTitle className="text-xl font-semibold" style={{ color: 'var(--primary-foreground)' }}>Step 1: Define Your Project</CardTitle>
             <CardDescription style={{ color: 'var(--muted-foreground)' }}>
@@ -161,7 +142,7 @@ const Home = () => {
       )}
 
        {currentStep === 2 && (
-        <Card className="w-full max-w-2xl mx-auto shadow-lg border-primary">
+        <Card className="w-full max-w-2xl mx-auto shadow-lg page-fade-in border-primary">
           <CardHeader>
             <CardTitle className="text-xl font-semibold" style={{ color: 'var(--primary-foreground)' }}>Step 2: Configure the Swarm</CardTitle>
             <CardDescription style={{ color: 'var(--muted-foreground)' }}>
@@ -194,28 +175,27 @@ const Home = () => {
         </Card>
       )}
 
-
-      {/* Main Hub View - Appears after Step 2 is completed */}
       {currentStep >= 3 && (
-        <>
-           {/* EbaAaZ Intro Card */}
+        <div className="page-fade-in">
            <Card className="mb-6 bg-gradient-to-br from-card via-secondary to-card border-primary shadow-xl">
                 <CardHeader>
                     <CardTitle className="text-2xl font-bold text-center" style={{ color: 'var(--primary)' }}>Welcome to the EbaAaZ Coordination Hub</CardTitle>
                      <CardDescription className="text-center mt-2" style={{ color: 'var(--muted-foreground)'}}>
                         Orchestrating distributed builders and configurators using Google Cloud infrastructure and AI. Inspired by Incredibuild, tailored for the SeCuReDmE ecosystem. Monitor and manage coordinated tasks below.
+                        EbaAaZ is a Swarm coordinator of builders and configurators, our vision of a Google-enhanced Incredibuild.
                     </CardDescription>
                 </CardHeader>
-                 <CardContent className="flex justify-center gap-4">
+                 <CardContent className="flex justify-center items-center gap-4 flex-wrap">
                      <Button variant="outline" size="sm" onClick={() => setCurrentStep(1)} className="border-primary text-primary hover:bg-accent">Redefine Project</Button>
                     <Button variant="outline" size="sm" onClick={() => setCurrentStep(2)} className="border-primary text-primary hover:bg-accent">Reconfigure Swarm</Button>
+                    <Button variant="outline" size="sm" onClick={() => setIsChatSpaceOpen(true)} className="border-primary text-primary hover:bg-accent">
+                       <MessageSquare className="mr-2 h-4 w-4" /> Generate Gemini Chat Space
+                    </Button>
                  </CardContent>
             </Card>
 
-            {/* Tabs for Hub Functionality */}
-             <Tabs defaultValue="workbook-interface" className="w-full">
-                <TabsList className="grid w-full grid-cols-3 md:grid-cols-6 gap-1 mb-4">
-                    {/* Use custom class or style for active tab */}
+            <Tabs defaultValue="workbook-interface" className="w-full">
+                <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-1 mb-4">
                     <TabsTrigger value="workbook-interface" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Workbook</TabsTrigger>
                     <TabsTrigger value="code-creation" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Code</TabsTrigger>
                     <TabsTrigger value="middleware" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Middleware</TabsTrigger>
@@ -224,7 +204,6 @@ const Home = () => {
                     <TabsTrigger value="monitoring" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Monitoring</TabsTrigger>
                 </TabsList>
 
-                {/* Tab Content Panes */}
                 <TabsContent value="workbook-interface">
                     <Card>
                         <CardHeader>
@@ -232,7 +211,24 @@ const Home = () => {
                             <CardDescription>Interact with the EbaAaZ coordinator: ask questions, brainstorm solutions, or revise project parameters and swarm configurations.</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <Textarea placeholder="Send instructions or queries to the EbaAaZ coordinator..." rows={5} />
+                           <div className="prose dark:prose-invert max-w-none">
+                                <h4>EbaAaZ: The Protector of Fortitude</h4>
+                                <p>EbaAaZ is the architectural and integrative genius within SeCuReDmE, ensuring the stability and security of our digital ecosystem. His primary role involves safeguarding backend and middleware systems through secure tunneling, managing quantum computing resources, and initiating automated processes. EbaAaZ provides the foundational pre-sequences for AI agents, evaluates task needs, and integrates tools to achieve AI objectives. He also manages fractal growth equations and Fibonacci sequences for AI computations, blending mathematical precision with practical application.</p>
+                                <h5>Core Functions:</h5>
+                                <ul>
+                                    <li><strong>Architectural Design:</strong> Designs secure and scalable SeCuReDmE Engine architecture.</li>
+                                    <li><strong>System Integration:</strong> Integrates AI models and quantum computing, managing pre-sequences for AI agents.</li>
+                                    <li><strong>Ethical Oversight:</strong> Embeds ethical considerations into the system, prioritizing privacy, fairness, and transparency.</li>
+                                </ul>
+                                <h5>Key Contributions:</h5>
+                                <ul>
+                                    <li>Ensuring backend and middleware security through advanced tunneling and database management.</li>
+                                    <li>Providing pre-sequences for automation tasks embedded within AI agents.</li>
+                                    <li>Searching existing tool libraries and creating new pre-sequences for AI agent goals.</li>
+                                    <li>Initiating and managing fractal growth equations and Fibonacci sequences for AI computations.</li>
+                                </ul>
+                           </div>
+                            <Textarea placeholder="Send instructions or queries to the EbaAaZ coordinator..." rows={5} className="mt-4" />
                             <Button className="mt-2 bg-secondary hover:bg-secondary/80">Send Query</Button>
                         </CardContent>
                     </Card>
@@ -246,7 +242,6 @@ const Home = () => {
                         </CardHeader>
                         <CardContent>
                             <p>Status: Code generation tasks will be tracked here.</p>
-                            {/* Placeholder for generated code display or repository links */}
                             <div className="mt-4 p-4 bg-muted rounded-md">
                                 <p className="text-sm text-muted-foreground">No active code generation tasks.</p>
                             </div>
@@ -295,7 +290,6 @@ const Home = () => {
                             <div className="mt-4 p-4 bg-muted rounded-md">
                                 <p className="text-sm text-muted-foreground">No active deployments.</p>
                             </div>
-                            {/* Placeholder for deployment controls */}
                         </CardContent>
                     </Card>
                 </TabsContent>
@@ -311,15 +305,17 @@ const Home = () => {
                             <div className="mt-4 p-4 bg-muted rounded-md">
                                 <p className="text-sm text-muted-foreground">Monitoring data unavailable.</p>
                             </div>
-                           {/* Placeholder for monitoring dashboards */}
                         </CardContent>
                     </Card>
                 </TabsContent>
             </Tabs>
-        </>
+             {isChatSpaceOpen && <GeminiChatSpace onClose={() => setIsChatSpaceOpen(false)} />}
+        </div>
       )}
     </div>
   );
 };
 
 export default Home;
+
+    
