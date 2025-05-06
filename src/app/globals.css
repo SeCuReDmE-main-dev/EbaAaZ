@@ -11,7 +11,7 @@ body {
 body {
   background-color: #0D1117; /* Dark Marine Blue */
   color: #C9D1D9; /* Soft White */
-  font-family: 'Source Sans Pro', sans-serif !important;
+  font-family: 'Roboto', sans-serif; /* Changed to Roboto and removed !important */
 }
 
 /* Tilt and Change Color on Highlight */
@@ -19,28 +19,28 @@ body {
   background: #FF69B4; /* Flash Pink background */
   color: #FFFF00; /* Yellow text */
   font-style: italic;
-  transform: rotate(10deg);
+  /* Removed transform: rotate(10deg) as it's not standard and might cause issues */
 }
 
 /* Gradient Border on Hover */
 button, .hover-gradient {
   border: 2px solid transparent;
-  background-image: linear-gradient(#0D1117, #0D1117), linear-gradient(45deg, #00A99D, #FF69B4);
+  background-image: linear-gradient(var(--background), var(--background)), linear-gradient(45deg, var(--accent), #FF69B4); /* Using CSS vars */
   background-origin: border-box;
   background-clip: content-box, border-box;
   transition: all 0.3s ease;
 }
 
 button:hover, .hover-gradient:hover {
-  border-color: transparent;
-  background-image: linear-gradient(#F76C6C, #F76C6C), linear-gradient(45deg, #00A99D, #FF69B4);
+  border-color: transparent; /* Ensure border color is transparent on hover */
+  background-image: linear-gradient(var(--primary), var(--primary)), linear-gradient(45deg, var(--accent), #FF69B4); /* Using CSS vars */
 }
 
 /* Animated Underline on Hover */
 a {
   position: relative;
   text-decoration: none;
-  color: #8B949E; /* Light Grey */
+  color: hsl(var(--muted-foreground)); /* Using CSS var for light grey */
 }
 
 a::after {
@@ -69,149 +69,154 @@ a:hover::after {
 
 /* 3D Button Effect */
 .button-3d {
-  background-color: #4F5D75; /* Metallic Silver */
-  color: #F76C6C; /* Orange */
+  background-color: hsl(var(--secondary)); /* Metallic Silver from theme */
+  color: hsl(var(--primary)); /* Orange from theme */
   border: none;
   padding: 10px 20px;
   font-size: 16px;
   border-radius: 5px;
-  box-shadow: 0 5px #2A0038; /* Dark Purple shadow */
+  box-shadow: 0 5px #2A0038; /* Dark Purple shadow - consider making this a theme variable if used widely */
   transition: all 0.3s ease;
 }
 
 .button-3d:hover {
-  background-color: #00A99D; /* Teal */
-  box-shadow: 0 3px #2A0038; /* Dark Purple shadow */
+  background-color: hsl(var(--accent)); /* Teal from theme */
+  box-shadow: 0 3px #2A0038; 
   transform: translateY(-2px);
 }
 
 .button-3d:active {
-  background-color: #00A99D; /* Teal */
-  box-shadow: 0 2px #2A0038; /* Dark Purple shadow */
+  background-color: hsl(var(--accent)); 
+  box-shadow: 0 2px #2A0038; 
   transform: translateY(1px);
 }
 
 /* Custom Tab Styles */
 .tab-label {
-  font-family: 'Source Sans Pro', sans-serif !important; /* Custom font */
-  font-size: 13px !important; /* Normal tab text size */
-  color: #F76C6C !important; /* Orange color for inactive tabs */
+  font-family: 'Roboto', sans-serif !important; /* Custom font, ensuring Roboto is used */
+  font-size: 13px !important; 
+  color: hsl(var(--primary)) !important; /* Orange color for inactive tabs */
 }
 
 /* Active Tab Styles */
-.tab-label[active="true"] {
-  font-weight: bold !important; /* Bold for active tab */
-  font-size: 15px !important; /* Slightly larger for active tab */
-  color: #00A99D !important; /* Teal color for active tab text */
-  border-bottom: 2px solid #00A99D !important; /* Teal underline */
-  background-color: #4F5D75 !important; /* Metallic Silver background */
+.tab-label[data-state="active"], /* Using data-state for ShadCN active tabs */
+.tab-label[active="true"] { /* Keeping for potential other uses */
+  font-weight: bold !important; 
+  font-size: 15px !important; 
+  color: hsl(var(--accent)) !important; /* Teal color for active tab text */
+  border-bottom: 2px solid hsl(var(--accent)) !important; /* Teal underline */
+  background-color: hsl(var(--secondary)) !important; /* Metallic Silver background */
 }
+
 
 /* General Header, Footer, Sidebar Styles */
+/* These specific styles might conflict with ShadCN theming. Prefer using ShadCN variables. */
 .header, .footer, .header-menu, .sidebar {
-  background-color: #2A0038 !important; /* Dark Purple */
-  border-bottom: 2px solid #FF69B4 !important; /* Pink underline */
-  color: #F76C6C !important; /* Orange */
+  background-color: #2A0038 !important; /* Dark Purple - Consider making this a theme variable */
+  border-bottom: 2px solid #FF69B4 !important; /* Pink underline - Consider making this a theme variable */
+  color: hsl(var(--primary)) !important; /* Orange */
 }
 
-/* Additional elements for consistent theming */
+/* Additional elements for consistent theming - these will be mostly handled by Tailwind and ShadCN variables below */
 h1, h2, h3, h4, h5, h6, p, span, li, td, th, label {
-  color: #F76C6C !important; /* Orange */
+  /* color: hsl(var(--primary)) !important; /* Orange - This might be too aggressive, let ShadCN variables handle it */
 }
 
 input, textarea {
-  background-color: #0D1117 !important; /* Dark Marine Blue */
-  color: #F76C6C !important; /* Orange */
-  border: 1px solid #4F5D75 !important; /* Metallic Silver */
+  /* background-color: hsl(var(--background)) !important; /* Dark Marine Blue */
+  /* color: hsl(var(--primary)) !important; /* Orange */
+  /* border: 1px solid hsl(var(--border)) !important; /* Metallic Silver */
 }
 
 input:focus, textarea:focus {
-  border-color: #00A99D !important; /* Teal */
-  outline: none !important;
+  /* border-color: hsl(var(--accent)) !important; /* Teal */
+  /* outline: none !important; */
 }
 
+/*
 button {
-  background-color: #4F5D75 !important; /* Metallic Silver */
-  color: #F76C6C !important; /* Orange */
-  border: 2px solid #00A99D !important; /* Teal border */
+  background-color: hsl(var(--secondary)) !important; 
+  color: hsl(var(--primary)) !important; 
+  border: 2px solid hsl(var(--accent)) !important; 
 }
 
 button:hover {
-  background-color: #00A99D !important; /* Teal */
-  border-color: #F76C6C !important; /* Orange */
-  color: #FFFFFF !important;
+  background-color: hsl(var(--accent)) !important; 
+  border-color: hsl(var(--primary)) !important; 
+  color: hsl(var(--foreground)) !important; 
 }
+*/
 
 a {
-  color: #FF8C00; /* Dark Orange */
+  /* color: hsl(var(--primary)); */ /* Dark Orange - handled by default link styling */
   text-decoration: none;
 }
 
-a:hover {
-  color: #FFFFFF; /* White */
-}
+/* a:hover {
+  color: hsl(var(--foreground)); 
+} */
 
 @layer base {
   :root {
-    --background: 222.2 84% 4.9%; /* Deep Blue */
-    --foreground: 210 40% 98%; /* Soft White */
+    --background: 222.2 84% 4.9%; /* #0D1117 Deep Blue - Dark Marine Blue */
+    --foreground: 210 40% 98%; /* #F8FAFC Soft White */
 
-    --card: 222.2 84% 4.9%; /* Deep Blue */
-    --card-foreground: 210 40% 98%; /* Soft White */
+    --card: 217 32.6% 17.5%; /* #1A3A5F Marine Blue (Darker than original card, aligns with item bg) */
+    --card-foreground: 210 40% 98%; /* #F8FAFC Soft White */
 
-    --popover: 222.2 84% 4.9%; /* Deep Blue */
-    --popover-foreground: 210 40% 98%; /* Soft White */
+    --popover: 222.2 84% 4.9%; /* #0D1117 Deep Blue */
+    --popover-foreground: 210 40% 98%; /* #F8FAFC Soft White */
 
-    --primary: 26.1 94.8% 58.2%; /* Orange */
-    --primary-foreground: 210 40% 98%; /* Soft White */
+    --primary: 350.9 94.8% 58.2%; /* #F76C6C Orange (Mapped to F76C6C) */
+    --primary-foreground: 210 40% 98%; /* #F8FAFC Soft White */
 
-    --secondary: 214.3 45.2% 26.5%; /* Metallic Silver */
-    --secondary-foreground: 210 40% 98%; /* Soft White */
+    --secondary: 214.3 26.2% 33.5%; /* #4F5D75 Metallic Silver (Mapped to 4F5D75) */
+    --secondary-foreground: 210 40% 98%; /* #F8FAFC Soft White */
 
-    --muted: 214.3 45.2% 26.5%; /* Metallic Silver */
-    --muted-foreground: 215 20.2% 65.1%; /* Lighter Grey for muted text */
+    --muted: 214.3 26.2% 33.5%; /* #4F5D75 Metallic Silver (Same as secondary) */
+    --muted-foreground: 209.3 14.2% 60.1%; /* #8B949E Lighter Grey for muted text (Mapped to 8B949E) */
 
-    --accent: 174.5 100% 34.1%; /* Teal */
-    --accent-foreground: 210 40% 98%; /* Soft White */
+    --accent: 174.5 100% 34.1%; /* #00A99D Teal (Mapped to 00A99D) */
+    --accent-foreground: 210 40% 98%; /* #F8FAFC Soft White */
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 72.2% 50.6%; /* Standard destructive red */
+    --destructive-foreground: 210 40% 98%; /* #F8FAFC Soft White */
 
-    --border: 214.3 45.2% 26.5%; /* Metallic Silver */
-    --input: 214.3 45.2% 26.5%; /* Metallic Silver */
-    --ring: 26.1 94.8% 58.2%; /* Orange */
+    --border: 214.3 26.2% 33.5%; /* #4F5D75 Metallic Silver (Same as secondary) */
+    --input: 222.2 84% 4.9%; /* #0D1117 Dark Marine Blue (for input background) */
+    --ring: 350.9 94.8% 58.2%; /* #F76C6C Orange (for focus rings) */
 
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%; /* Deep Blue */
-    --foreground: 210 40% 98%; /* Soft White */
+    --background: 222.2 84% 4.9%; /* #0D1117 Deep Blue - Dark Marine Blue */
+    --foreground: 210 40% 98%; /* #F8FAFC Soft White */
 
-    --card: 222.2 84% 4.9%; /* Deep Blue */
-    --card-foreground: 210 40% 98%; /* Soft White */
+    --card: 217 32.6% 17.5%; /* #1A3A5F Marine Blue (Darker than original card, aligns with item bg) */
+    --card-foreground: 210 40% 98%; /* #F8FAFC Soft White */
 
-    --popover: 222.2 84% 4.9%; /* Deep Blue */
-    --popover-foreground: 210 40% 98%; /* Soft White */
+    --popover: 222.2 84% 4.9%; /* #0D1117 Deep Blue */
+    --popover-foreground: 210 40% 98%; /* #F8FAFC Soft White */
 
-    --primary: 26.1 94.8% 58.2%; /* Orange */
-    --primary-foreground: 210 40% 98%; /* Soft White */
+    --primary: 350.9 94.8% 58.2%; /* #F76C6C Orange (Mapped to F76C6C) */
+    --primary-foreground: 210 40% 98%; /* #F8FAFC Soft White */
 
-    --secondary: 214.3 45.2% 26.5%; /* Metallic Silver */
-    --secondary-foreground: 210 40% 98%; /* Soft White */
+    --secondary: 214.3 26.2% 33.5%; /* #4F5D75 Metallic Silver (Mapped to 4F5D75) */
+    --secondary-foreground: 210 40% 98%; /* #F8FAFC Soft White */
 
-    --muted: 214.3 45.2% 26.5%; /* Metallic Silver */
-    --muted-foreground: 215 20.2% 65.1%; /* Lighter Grey for muted text */
+    --muted: 214.3 26.2% 33.5%; /* #4F5D75 Metallic Silver (Same as secondary) */
+    --muted-foreground: 209.3 14.2% 60.1%; /* #8B949E Lighter Grey for muted text (Mapped to 8B949E) */
 
-    --accent: 174.5 100% 34.1%; /* Teal */
-    --accent-foreground: 210 40% 98%; /* Soft White */
+    --accent: 174.5 100% 34.1%; /* #00A99D Teal (Mapped to 00A99D) */
+    --accent-foreground: 210 40% 98%; /* #F8FAFC Soft White */
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 72.2% 50.6%; /* Standard destructive red */
+    --destructive-foreground: 210 40% 98%; /* #F8FAFC Soft White */
 
-    --border: 214.3 45.2% 26.5%; /* Metallic Silver */
-    --input: 214.3 45.2% 26.5%; /* Metallic Silver */
-    --ring: 26.1 94.8% 58.2%; /* Orange */
+    --border: 214.3 26.2% 33.5%; /* #4F5D75 Metallic Silver (Same as secondary) */
+    --input: 222.2 84% 4.9%; /* #0D1117 Dark Marine Blue (for input background) */
+    --ring: 350.9 94.8% 58.2%; /* #F76C6C Orange (for focus rings) */
   }
 }
 
@@ -258,8 +263,8 @@ a:hover {
   right: 20px;
   width: 60px;
   height: 60px;
-  background-color: #00A99D; /* Teal */
-  color: #FFFFFF; /* White */
+  background-color: hsl(var(--accent)); /* Teal */
+  color: hsl(var(--accent-foreground)); /* White */
   border-radius: 50%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   display: flex;
@@ -272,18 +277,18 @@ a:hover {
 }
 
 .fab:hover {
-  background-color: #F76C6C; /* Orange */
+  background-color: hsl(var(--primary)); /* Orange */
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 
 .fab:active {
-  background-color: #4F5D75; /* Metallic Silver */
+  background-color: hsl(var(--secondary)); /* Metallic Silver */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* Custom Link Hover and Active Effects */
 a:hover {
-  color: #00FF00; /* Green */
+  color: #00FF00; /* Green - this overrides the ::after element for underline, consider if this is desired */
 }
 
 a:active {
@@ -292,11 +297,11 @@ a:active {
 
 /* Anti-Entropy Poem Styling */
 .poem {
-  font-family: 'Source Sans Pro', sans-serif;
-  color: #C9D1D9; /* Soft White */
-  background-color: #0D1117; /* Dark Marine Blue */
+  font-family: 'Roboto', sans-serif; /* Ensure Roboto is used */
+  color: hsl(var(--foreground)); /* Soft White */
+  background-color: hsl(var(--background)); /* Dark Marine Blue */
   padding: 20px;
-  border-left: 5px solid #F76C6C; /* Orange */
+  border-left: 5px solid hsl(var(--primary)); /* Orange */
   margin: 20px 0;
 }
 
@@ -305,8 +310,8 @@ a:active {
   position: fixed;
   top: 20px;
   right: 20px;
-  background-color: #4F5D75; /* Metallic Silver */
-  color: #FFFFFF; /* White */
+  background-color: hsl(var(--secondary)); /* Metallic Silver */
+  color: hsl(var(--secondary-foreground)); /* White */
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
@@ -314,21 +319,22 @@ a:active {
 }
 
 .dark-mode-toggle:hover {
-  background-color: #00A99D; /* Teal */
+  background-color: hsl(var(--accent)); /* Teal */
 }
 
 /* Applying Anti-Entropy Principles for Layout Consistency */
-.container {
+/* .container class from Tailwind might conflict. Renaming to .ebaaz-container or similar if this is a custom container style */
+.ebaaz-container { /* Renamed to avoid conflict */
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
 }
 
-.item {
+.item { /* This style remains as is, but ensure it's applied to appropriate elements */
   flex: 1 1 calc(33.333% - 20px);
   margin: 10px;
-  background-color: #1A3A5F; /* Marine Blue */
-  color: #C9D1D9; /* Soft White */
+  background-color: hsl(var(--card)); /* Marine Blue - Mapped to card background */
+  color: hsl(var(--card-foreground)); /* Soft White */
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);

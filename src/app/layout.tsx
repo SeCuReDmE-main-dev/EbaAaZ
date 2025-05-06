@@ -1,10 +1,10 @@
 import type {Metadata} from 'next';
-import { Source_Sans_Pro } from 'next/font/google';
+import { Roboto } from 'next/font/google'; // Changed from Source_Sans_Pro to Roboto
 import './globals.css';
 import Link from 'next/link';
 import { Toaster } from "@/components/ui/toaster"; 
 
-const sourceSansPro = Source_Sans_Pro({ 
+const roboto = Roboto({ // Changed from sourceSansPro
   subsets: ['latin'],
   weight: ['400', '700'],
   style: ['normal', 'italic']
@@ -22,13 +22,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${sourceSansPro.className} text-center`}>
+      <body className={`${roboto.className} text-center`}> {/* Applied roboto.className */}
         <header className="header sticky top-0 z-50 w-full border-b backdrop-blur">
           <div className="container flex h-14 items-center header-menu">
              <Link href="/" className="mr-6 flex items-center space-x-2" style={{ margin: '0 10px' }}>
                 <span className="font-bold">EbaAaZ</span>
             </Link>
-             <nav className="flex items-center space-x-4 text-sm font-medium"> {/* Adjusted space-x for potentially more items */}
+             <nav className="flex items-center space-x-4 text-sm font-medium">
                 <Link href="/" style={{ margin: '0 10px' }}>Human Hub</Link>
                 <Link href="/github-mcp-server" style={{ margin: '0 10px' }}>MCP Server</Link>
                 <Link href="/resources-hub" style={{ margin: '0 10px' }}>Resources Hub</Link>
