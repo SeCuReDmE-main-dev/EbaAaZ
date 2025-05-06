@@ -1,18 +1,19 @@
+
 import type {Metadata} from 'next';
-import { Roboto } from 'next/font/google'; // Changed from Source_Sans_Pro to Roboto
+import { Roboto } from 'next/font/google';
 import './globals.css';
 import Link from 'next/link';
 import { Toaster } from "@/components/ui/toaster"; 
 
-const roboto = Roboto({ // Changed from sourceSansPro
+const roboto = Roboto({
   subsets: ['latin'],
   weight: ['400', '700'],
   style: ['normal', 'italic']
 });
 
 export const metadata: Metadata = {
-  title: 'EbaAaZ', 
-  description: 'Coordination and Integration Hub powered by SeCuReDmE',
+  title: 'EbaAaZ - Human Hub', 
+  description: 'Configuration and Integration Hub powered by SeCuReDmE',
 };
 
 export default function RootLayout({
@@ -22,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${roboto.className} text-center`}> {/* Applied roboto.className */}
+      <body className={`${roboto.className} text-center`}>
         <header className="header sticky top-0 z-50 w-full border-b backdrop-blur">
           <div className="container flex h-14 items-center header-menu">
              <Link href="/" className="mr-6 flex items-center space-x-2" style={{ margin: '0 10px' }}>
@@ -47,3 +48,5 @@ export default function RootLayout({
     </html>
   );
 }
+
+    
