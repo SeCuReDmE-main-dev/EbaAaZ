@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, {useState, useEffect, useCallback} from 'react';
@@ -72,16 +71,53 @@ const GithubMCPServerPage = () => {
 
   const fetchMcpOptions = useCallback(async () => {
     try {
-      const response = await fetch("https://raw.githubusercontent.com/Celebrum/servers/main/servers.json");
+      // Use the canonical URL for servers.json
+      const response = await fetch("https://raw.githubusercontent.com/modelcontextprotocol/servers/main/servers.json");
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      const options: McpOption[] = data.servers.map((server: any) => ({
-        id: server.id,
-        label: server.name,
-        description: server.description,
-      }));
+      // Assuming the structure is { "reference": [ { "id": "...", "name": "...", "description": "..." } ], "third-party": { "official": [...], "community": [...] } }
+      // We need to extract options from all relevant sections.
+      const options: McpOption[] = [];
+
+      if (data.reference && Array.isArray(data.reference)) {
+        data.reference.forEach((server: any) => {
+          if(server.id && server.name && server.description) {
+            options.push({
+              id: server.id,
+              label: server.name,
+              description: server.description,
+            });
+          }
+        });
+      }
+      
+      if (data['third-party']?.official && Array.isArray(data['third-party'].official)) {
+         data['third-party'].official.forEach((server: any) => {
+            if(server.id && server.name && server.description) {
+                options.push({
+                    id: server.id,
+                    label: server.name,
+                    description: server.description,
+                });
+            }
+         });
+      }
+
+      if (data['third-party']?.community && Array.isArray(data['third-party'].community)) {
+        data['third-party'].community.forEach((server: any) => {
+            if(server.id && server.name && server.description) {
+                options.push({
+                    id: server.id,
+                    label: server.name,
+                    description: server.description,
+                });
+            }
+        });
+      }
+
+
       setMcpOptions(options);
     } catch (error: any) {
       setError(`Failed to fetch MCP options: ${error.message}`);
@@ -93,30 +129,26 @@ const GithubMCPServerPage = () => {
   useEffect(() => {
     const loadToken = async () => {
       const envToken = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
-      const storedToken = localStorage.getItem('githubToken'); // This would be the hashed token
+      const storedHashedToken = localStorage.getItem('githubHashedToken');
 
       if (envToken) {
-        setGithubToken(envToken); // Store the actual token for validation logic
+        setGithubToken(envToken);
         try {
             const hashed = await hashToken(envToken);
-            setHashedToken(hashed); // For display
+            setHashedToken(hashed);
+            localStorage.setItem('githubHashedToken', hashed); // Store the hashed version
             setIsTokenSetup(true);
         } catch (err) {
             setError('Error hashing the environment token.');
             console.error(err);
         }
-      } else if (storedToken) {
-        // If only a stored (hashed) token exists, it means it was manually entered.
-        // We don't have the raw token to validate directly here,
-        // but we know it was set up.
-        setHashedToken(storedToken);
+      } else if (storedHashedToken) {
+        setHashedToken(storedHashedToken);
         setIsTokenSetup(true);
-        // We might need to re-prompt for the token if validation requires the raw token
-        // or assume it's valid until a real validation fails.
-        // For this example, we proceed as if it's set up.
+        // Raw token is not available, so we can't validate it here directly
+        // but we know it was manually set up.
       } else {
-        setError('GitHub Personal Access Token not found. Please set it up.');
-        console.error('GitHub Personal Access Token not found.');
+        // No token found, prompt user.
         setOpenDialog(true);
       }
     };
@@ -126,7 +158,7 @@ const GithubMCPServerPage = () => {
 
 
   useEffect(() => {
-    if (isTokenSetup && githubToken) { // Only validate if the raw token is available
+    if (isTokenSetup && githubToken) { // Only validate if the raw token is available (from env or newly submitted)
       const checkTokenValidity = async () => {
         try {
           const expiryDays = await calculateTokenExpiry(githubToken);
@@ -139,12 +171,10 @@ const GithubMCPServerPage = () => {
       };
       checkTokenValidity();
     } else if (isTokenSetup && !githubToken && hashedToken) {
-        // If token is set up (manually entered previously) but raw token isn't in state
-        // We can't validate it here. We'll rely on the stored expiry or show a default.
-        // For simplicity, let's assume it needs re-validation if raw token is not present
-        // or rely on a previously stored expiry if available.
-        // For this demo, if only hashed token is present, we'll just set a default positive expiry.
-        setTokenExpiryDays(30); // Default to 30 days if only hashed token is present
+        // Token was set up (manually entered previously) but raw token isn't in state
+        // We can't validate it here without the raw token.
+        // Assume valid or use a stored expiry if implemented. For now, default to 30 days.
+        setTokenExpiryDays(30);
     }
   }, [githubToken, isTokenSetup, hashedToken, calculateTokenExpiry]);
 
@@ -163,7 +193,7 @@ const GithubMCPServerPage = () => {
       updateStatusColor();
       const intervalId = setInterval(() => {
         setTokenExpiryDays(prevDays => (prevDays ? Math.max(0, prevDays - 1) : 0));
-      }, 24 * 60 * 60 * 1000);
+      }, 24 * 60 * 60 * 1000); // Update once a day
       return () => clearInterval(intervalId);
     }
   }, [tokenExpiryDays]);
@@ -176,7 +206,7 @@ const GithubMCPServerPage = () => {
     try {
       const hashed = await hashToken(tempToken);
       setHashedToken(hashed);
-      localStorage.setItem('githubToken', hashed);
+      localStorage.setItem('githubHashedToken', hashed);
       setGithubToken(tempToken); // Store the actual token for current session validation
       setIsTokenSetup(true);
       setOpenDialog(false);
@@ -203,7 +233,7 @@ const GithubMCPServerPage = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 page-fade-in">
       <h1 className="text-2xl font-bold mb-4">
         MCP Server Configuration
       </h1>
@@ -216,7 +246,7 @@ const GithubMCPServerPage = () => {
               <AlertDialogTitle>GitHub Token Required</AlertDialogTitle>
               <AlertDialogDescription>
                 To use the MCP Server, you need to provide a GitHub Personal Access Token.
-                If you have already set the NEXT_PUBLIC_GITHUB_TOKEN environment variable, this step might not be necessary unless the token is invalid or expired.
+                This token will be hashed and stored locally in your browser.
                 <br/>
                 <a
                   href="https://github.com/settings/tokens/new?scopes=repo,workflow,user"
@@ -241,7 +271,7 @@ const GithubMCPServerPage = () => {
                 </div>
             </div>
             <AlertDialogFooter>
-                <AlertDialogCancel onClick={() => {setOpenDialog(false); setError(null)}}>Cancel</AlertDialogCancel>
+                <AlertDialogCancel onClick={() => {setOpenDialog(false); if(!isTokenSetup) setError('Token setup cancelled. MCP functionality may be limited.')}}>Cancel</AlertDialogCancel>
               <AlertDialogAction onClick={handleTokenSubmit}>
                 Submit Token
               </AlertDialogAction>
@@ -253,7 +283,7 @@ const GithubMCPServerPage = () => {
         <div className="mt-4 p-3 bg-muted rounded-md">
           <p className="text-sm">
             Stored Hashed Token (SHA-256):{' '}
-            <span className="font-mono break-all text-xs">{hashedToken}</span>
+            <span className="font-mono break-all text-xs">{hashedToken.substring(0,10)}...</span>
           </p>
         </div>
       )}
@@ -328,36 +358,37 @@ const GithubMCPServerPage = () => {
 
       <Card className="mt-8">
         <CardHeader>
-          <CardTitle>About GitHub MCP Server</CardTitle>
+          <CardTitle>About MCP Server Integration</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
             <p>
-                The GitHub MCP Server is a Model Context Protocol (MCP) server that
-                provides seamless integration with GitHub APIs, enabling advanced
-                automation and interaction capabilities for developers and tools.
-                This page allows you to configure and activate the server using your GitHub Personal Access Token.
+                The Model Context Protocol (MCP) Server integration allows EbaAaZ Hub
+                to connect with various external tools and services, enabling advanced
+                automation and interaction capabilities. This page facilitates the configuration
+                and activation of these connections using necessary credentials, like a GitHub Personal Access Token for GitHub-related MCPs.
             </p>
             <section>
             <h3 className="text-lg font-semibold mb-2">
-            Use Cases
+            General Use Cases for MCPs
             </h3>
             <ul className="list-disc pl-5 space-y-1 text-sm">
-            <li>Automating GitHub workflows and processes.</li>
-            <li>Extracting and analyzing data from GitHub repositories.</li>
+            <li>Automating workflows across different platforms.</li>
+            <li>Extracting and analyzing data from various sources (e.g., Git repositories, APIs, databases).</li>
             <li>
                 Building AI-powered tools and applications that interact with
-                GitHub's ecosystem.
+                a wide range of ecosystems.
             </li>
+            <li>Enabling complex, multi-step operations orchestrated by AI.</li>
             </ul>
         </section>
 
         <section>
             <h3 className="text-lg font-semibold mb-2">
-            Prerequisites
+            Prerequisites for GitHub MCP
             </h3>
             <p className="text-sm">
-            To run the server, you will need to have Docker installed and running (if using Docker-based MCPs).
-            You will also need to create a GitHub Personal Access Token with appropriate scopes (e.g., `repo`, `workflow`, `user`).
+            For GitHub-specific MCPs, you will typically need to create a GitHub Personal Access Token with appropriate scopes (e.g., `repo`, `workflow`, `user`).
+            Other MCPs might require different authentication methods or API keys.
             </p>
         </section>
         </CardContent>
@@ -366,49 +397,51 @@ const GithubMCPServerPage = () => {
 
       <section className="mt-6 p-4 border rounded-md bg-card">
         <h2 className="text-xl font-semibold mb-3">
-          Installation & Usage Guide
+          General MCP Configuration Guide (Example for GitHub)
         </h2>
         <p className="text-sm mb-2">
-          For manual installation with VS Code, add the following to your User Settings (JSON) or a workspace `.vscode/mcp.json` file:
+          To manually configure an MCP server (like the GitHub MCP Server) with VS Code, you might add something similar to the following to your User Settings (JSON) or a workspace `.vscode/mcp.json` file.
+          The exact configuration depends on the specific MCP server.
         </p>
         <pre className="p-3 rounded-md bg-muted overflow-x-auto text-xs">
           <code>
             {`
-// For User Settings (settings.json)
+// Example for User Settings (settings.json) for a GitHub MCP
 "mcp": {
   "inputs": [
     {
       "type": "promptString",
-      "id": "github_token",
-      "description": "GitHub Personal Access Token",
+      "id": "github_token_example", // Use a unique ID
+      "description": "GitHub Personal Access Token for MCP",
       "password": true
     }
   ],
   "servers": {
-    "github": {
-      "command": "docker", // Or your custom command
+    "github_mcp_example": { // Use a unique server ID
+      "command": "docker", // Or your custom command for the specific MCP
       "args": [
         "run", "-i", "--rm",
         "-e", "GITHUB_PERSONAL_ACCESS_TOKEN",
-        "ghcr.io/github/github-mcp-server" // Example, replace if needed
+        "ghcr.io/github/github-mcp-server" // Or the specific image/executable
       ],
       "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "\${env:NEXT_PUBLIC_GITHUB_TOKEN:input:github_token}"
+        // Environment variable expected by the MCP server
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "\${input:github_token_example}"
       }
     }
   }
 }
 
 // For .vscode/mcp.json (mcp key is not needed at the root)
-{
-  "inputs": [ /* ... */ ],
-  "servers": { /* ... */ }
-}
+// {
+//   "inputs": [ /* ... */ ],
+//   "servers": { /* ... */ }
+// }
             `}
           </code>
         </pre>
          <p className="text-sm mt-4 mb-2">
-          Ensure your GitHub token is securely managed, either through VS Code's prompt or by setting the `NEXT_PUBLIC_GITHUB_TOKEN` environment variable in a `.env.local` file (which should be gitignored).
+          Ensure your tokens and sensitive credentials are securely managed. For this application, GitHub tokens are hashed and stored locally if entered through the UI. Environment variables (e.g., `NEXT_PUBLIC_GITHUB_TOKEN` in a `.env.local` file) are another common method, but ensure `.env.local` is in your `.gitignore`.
         </p>
       </section>
 
