@@ -2,21 +2,22 @@
 "use client";
 
 import { useState } from 'react';
+import type { ChangeEvent } from 'react';
+import Link from 'next/link';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { MessageSquare, BookOpen, Settings, FileCog, UploadCloud, Play, Save, UserCircle, Bell } from "lucide-react";
-import { GeminiChatSpace } from '@/components/gemini-chat-space';
-import Link from 'next/link';
-import type { ChangeEvent } from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { MessageSquare, BookOpen, Settings, FileCog, UploadCloud, Play, Save, UserCircle, Bell } from "lucide-react";
+import { EbaazChatSpace } from '@/components/ebaaz-chat-space'; // Changed import
 import { useToast } from "@/hooks/use-toast";
 
 
 const HumanHubPage = () => {
-  const [showGeminiChat, setShowGeminiChat] = useState(false);
+  const [showEbaazChat, setShowEbaazChat] = useState(false); // Renamed state
+  const [chatContext, setChatContext] = useState<string | undefined>(undefined); // New state for chat context
   const { toast } = useToast();
   const [displayName, setDisplayName] = useState("EbaAaZ User");
   const [darkMode, setDarkMode] = useState(true);
@@ -84,11 +85,16 @@ const HumanHubPage = () => {
     });
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Simulate processing
+      await new Promise(resolve => setTimeout(resolve, 2000)); 
+      // In a real scenario, you would call an AI flow here, e.g.:
+      // const graftContent = await graftFile.text();
+      // const result = await processGraftFlow({ graftContent }); // Assuming such a flow exists
+      // console.log("Graft processing result:", result);
       toast({
         title: "Graft File Processed",
         description: `${graftFile.name} has been processed successfully. (Simulated)`,
-        variant: "default",
+        variant: "default", 
       });
     } catch (error) {
       console.error("Error processing graft file:", error);
@@ -102,37 +108,43 @@ const HumanHubPage = () => {
     }
   };
 
+  const handleOpenEbaazChat = () => {
+    const currentSettingsSummary = `Display Name: ${displayName}, Dark Mode: ${darkMode}, Workers: ${numWorkers}, Logging: ${advancedLogging}, Notifications: ${emailNotifications} via ${notificationChannel}. Graft File: ${graftFileName || 'None'}.`;
+    const context = `User is on the EbaAaZ Human Hub page.
+    Project: EbaAaZ - The Protector of Fortitude, an application for configuration and integration hub powered by SeCuReDmE.
+    Current User: ${displayName}
+    Current Page Configurations: ${currentSettingsSummary}
+    The user is configuring their EbaAaZ experience, including user profile, swarm configuration, notification settings, and role/permission graft configurations.`;
+    setChatContext(context);
+    setShowEbaazChat(true);
+  };
 
   return (
     <div className="container mx-auto p-4 flex flex-col items-center gap-6 page-fade-in text-center">
-      <h1 className="text-4xl font-bold mb-6" style={{ color: 'var(--primary)' }}>
-        EbaAaZ
+       <h1 className="text-4xl font-bold mb-6" style={{ color: 'var(--primary)' }}>
+         EbaAaZ Human Hub
       </h1>
 
-      <Card className="w-full max-w-3xl shadow-lg border-primary">
-        <CardHeader className="text-center">
+      <Card className="w-full max-w-3xl shadow-lg border-primary text-center">
+        <CardHeader>
           <CardTitle className="text-2xl font-semibold" style={{ color: 'var(--primary-foreground)' }}>
-            The Protector of Fortitude
+            Welcome to the Human Hub
           </CardTitle>
-          <CardDescription style={{ color: 'var(--muted-foreground)' }} className="text-center">
-            Welcome to EbaAaZ, the Architect of Integration within the SeCuReDmE framework.
-            EbaAaZ embodies a mind that seamlessly connects logic, creativity, and ethical responsibility,
-            safeguarding our digital ecosystem.
+          <CardDescription style={{ color: 'var(--muted-foreground)' }}>
+            Configure your EbaAaZ experience, manage swarm settings, and define role-based permissions.
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4 text-sm text-center" style={{ color: 'var(--muted-foreground)' }}>
+        <CardContent className="space-y-4 text-sm" style={{ color: 'var(--muted-foreground)' }}>
           <p>
-            EbaAaZ's primary role is to ensure the stability and security of backend and middleware through secure tunneling and advanced technologies. He initiates automated processes, manages quantum computing resources, and integrates diverse AI models, all guided by an unwavering commitment to ethical principles.
-          </p>
-          <p>
-            The SeCuReDmE vision aims for equilibrium in societal regulation through observational constructivism and effective compensation. It envisions a future where technology uplifts, empowers, and creates a more balanced and ethical digital world. Key personas like CeLeBrUm (collective intelligence) and SenNnT-i (compassionate observer) work alongside EbaAaZ to achieve this vision.
+            This is your central space for tailoring EbaAaZ to your needs. Adjust your profile, set up notification preferences,
+            configure how the AI swarm operates, and manage access control through graft files.
           </p>
         </CardContent>
       </Card>
 
       <div className="flex flex-col sm:flex-row gap-4 mt-6 justify-center">
-        <Button onClick={() => setShowGeminiChat(true)} className="bg-accent hover:bg-accent/90 text-accent-foreground">
-          <MessageSquare className="mr-2 h-5 w-5" /> Open Gemini Chat
+        <Button onClick={handleOpenEbaazChat} className="bg-accent hover:bg-accent/90 text-accent-foreground">
+          <MessageSquare className="mr-2 h-5 w-5" /> Open EbaAaZ Chat
         </Button>
         <Link href="/resources-hub" passHref>
           <Button variant="outline">
@@ -141,10 +153,10 @@ const HumanHubPage = () => {
         </Link>
       </div>
       
-      {showGeminiChat && <GeminiChatSpace onClose={() => setShowGeminiChat(false)} />}
+      {showEbaazChat && <EbaazChatSpace context={chatContext} onClose={() => setShowEbaazChat(false)} />}
 
       <h2 className="text-3xl font-bold mt-12 mb-6" style={{ color: 'var(--primary)' }}>
-        Human Hub Configuration
+        Hub Configuration
       </h2>
 
       <Card className="w-full max-w-3xl mx-auto shadow-lg border-primary text-left">
@@ -297,5 +309,3 @@ const HumanHubPage = () => {
 };
 
 export default HumanHubPage;
-
-    

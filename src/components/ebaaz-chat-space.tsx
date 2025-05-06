@@ -8,9 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/componen
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { X, Send, Bot, User, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-// Import your Genkit flow if you have one for chat.
-// For now, we'll simulate responses.
-// import { generateChatResponse } from '@/ai/flows/chat-flow'; // Example import
+import { generateEbaazChatResponse, type EbaazChatInput } from '@/ai/flows/ebaaz-chat-flow';
 
 interface Message {
   id: string;
@@ -19,11 +17,12 @@ interface Message {
   timestamp: Date;
 }
 
-interface GeminiChatSpaceProps {
+interface EbaazChatSpaceProps {
   onClose: () => void;
+  context?: string; // Context about the current page/user
 }
 
-export const GeminiChatSpace: React.FC<GeminiChatSpaceProps> = ({ onClose }) => {
+export const EbaazChatSpace: React.FC<EbaazChatSpaceProps> = ({ onClose, context }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -39,6 +38,18 @@ export const GeminiChatSpace: React.FC<GeminiChatSpaceProps> = ({ onClose }) => 
     scrollToBottom();
   }, [messages]);
 
+  useEffect(() => {
+    if (context) {
+      const initialBotMessage: Message = {
+        id: Date.now().toString() + 'init',
+        text: "Hello! I'm EbaAaZ, your AI assistant. How can I help you today based on your current context?",
+        sender: 'bot',
+        timestamp: new Date(),
+      };
+      setMessages([initialBotMessage]);
+    }
+  }, [context]);
+
   const handleSendMessage = async (e?: FormEvent<HTMLFormElement>) => {
     if (e) e.preventDefault();
     if (!input.trim()) return;
@@ -53,14 +64,14 @@ export const GeminiChatSpace: React.FC<GeminiChatSpaceProps> = ({ onClose }) => 
     setInput('');
     setIsLoading(true);
 
-    // Simulate AI response
     try {
-      // Replace with actual Genkit call:
-      // const response = await generateChatResponse({ query: userMessage.text });
-      // const botMessageText = response.answer;
-      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate delay
-      const botMessageText = `This is a simulated response to: "${userMessage.text}". In a real application, I would use Genkit to generate a meaningful reply.`;
-
+      const chatInput: EbaazChatInput = {
+        query: userMessage.text,
+        context: context || "User is interacting with EbaAaZ chat without specific page context.",
+        history: messages.map(msg => ({ role: msg.sender, text: msg.text })) // Basic history
+      };
+      const response = await generateEbaazChatResponse(chatInput);
+      const botMessageText = response.answer;
 
       const botMessage: Message = {
         id: Date.now().toString() + 'bot',
@@ -70,10 +81,10 @@ export const GeminiChatSpace: React.FC<GeminiChatSpaceProps> = ({ onClose }) => 
       };
       setMessages((prevMessages) => [...prevMessages, botMessage]);
     } catch (error) {
-      console.error('Error generating chat response:', error);
+      console.error('Error generating EbaAaZ chat response:', error);
       const errorMessage: Message = {
         id: Date.now().toString() + 'error',
-        text: 'Sorry, I encountered an error. Please try again.',
+        text: 'Sorry, I encountered an error processing your request. Please try again.',
         sender: 'bot',
         timestamp: new Date(),
       };
@@ -89,7 +100,7 @@ export const GeminiChatSpace: React.FC<GeminiChatSpaceProps> = ({ onClose }) => 
         <CardHeader className="flex flex-row items-center justify-between p-4 border-b">
           <CardTitle className="text-lg font-semibold flex items-center text-center w-full justify-center">
             <Bot className="mr-2 h-6 w-6 text-primary" />
-            Gemini Chat Space
+            EbaAaZ Chat
           </CardTitle>
           <Button variant="ghost" size="icon" onClick={onClose} aria-label="Close chat" className="absolute right-4 top-4">
             <X className="h-5 w-5" />
@@ -110,7 +121,7 @@ export const GeminiChatSpace: React.FC<GeminiChatSpaceProps> = ({ onClose }) => 
                   {msg.sender === 'user' && <User className="h-6 w-6 text-secondary-foreground flex-shrink-0 mb-1" />}
                   <div
                     className={cn(
-                      'p-3 rounded-lg shadow text-left', // Message content should be left-aligned typically
+                      'p-3 rounded-lg shadow text-left',
                       msg.sender === 'user'
                         ? 'bg-primary text-primary-foreground'
                         : 'bg-secondary text-secondary-foreground'
@@ -124,10 +135,10 @@ export const GeminiChatSpace: React.FC<GeminiChatSpaceProps> = ({ onClose }) => 
                 </div>
               ))}
               {isLoading && (
-                <div className="flex items-center justify-center space-x-2"> {/* Centered loading indicator */}
+                <div className="flex items-center justify-center space-x-2">
                    <Bot className="h-6 w-6 text-primary flex-shrink-0" />
                   <Loader2 className="h-5 w-5 animate-spin text-primary" />
-                  <span className="text-sm text-muted-foreground">Gemini is thinking...</span>
+                  <span className="text-sm text-muted-foreground">EbaAaZ is thinking...</span>
                 </div>
               )}
             </div>
@@ -138,9 +149,9 @@ export const GeminiChatSpace: React.FC<GeminiChatSpaceProps> = ({ onClose }) => 
             <Textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Type your message to Gemini..."
+              placeholder="Chat with EbaAaZ..."
               rows={1}
-              className="flex-grow resize-none min-h-[40px] max-h-[120px] bg-card border-input text-card-foreground focus:ring-primary text-left" // Textarea text left-aligned
+              className="flex-grow resize-none min-h-[40px] max-h-[120px] bg-card border-input text-card-foreground focus:ring-primary text-left"
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
                   e.preventDefault();
@@ -158,5 +169,3 @@ export const GeminiChatSpace: React.FC<GeminiChatSpaceProps> = ({ onClose }) => 
     </div>
   );
 };
-
-    
