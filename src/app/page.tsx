@@ -7,25 +7,25 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, MessageSquare, BookOpen, Link as LinkIcon } from "lucide-react";
+import { Loader2, MessageSquare, BookOpen, Link as LinkIcon, Zap, Brain, Eye, Cpu, TestTubeDiagonal } from "lucide-react";
 import { GeminiChatSpace } from '@/components/gemini-chat-space';
 import Link from 'next/link';
 
 const Home = () => {
   const { toast } = useToast();
   const [isChatSpaceOpen, setIsChatSpaceOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // Retained for potential future use within tabs
+  const [isLoading, setIsLoading] = useState(false); 
 
 
   return (
     <div className="container mx-auto p-4 flex flex-col gap-6 page-fade-in">
-      <h1 className="text-4xl font-bold text-center mb-6" style={{ color: 'var(--primary)' }}>EbaAaZ Hub</h1>
+      <h1 className="text-4xl font-bold text-center mb-6" style={{ color: 'var(--primary)' }}>EbaAaZ</h1>
 
       <Card className="w-full shadow-lg border-primary">
         <CardHeader>
-          <CardTitle className="text-2xl font-semibold" style={{ color: 'var(--primary-foreground)' }}>Welcome to EbaAaZ Hub</CardTitle>
+          <CardTitle className="text-2xl font-semibold" style={{ color: 'var(--primary-foreground)' }}>Welcome to EbaAaZ</CardTitle>
           <CardDescription style={{ color: 'var(--muted-foreground)' }}>
-            EbaAaZ Hub is a sophisticated swarm coordinator for builders and configurators, designed as a Google-enhanced counterpart to systems like Incredibuild. It serves as the central integration point for the SeCuReDmE (Secure Equilibrium Dynamics Matrix Engine) initiative, orchestrating distributed tasks and enabling advanced AI-driven automation and system management.
+            EbaAaZ is a sophisticated swarm coordinator for builders and configurators, designed as a Google-enhanced counterpart to systems like Incredibuild. It serves as the central integration point for the SeCuReDmE (Secure Equilibrium Dynamics Matrix Engine) initiative, orchestrating distributed tasks and enabling advanced AI-driven automation and system management. EbaAaZ, the Protector of Fortitude, ensures architectural and integrative genius, safeguarding backend and middleware, managing quantum resources, and initiating automated processes for AI agents.
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col sm:flex-row gap-4 items-center">
@@ -46,7 +46,7 @@ const Home = () => {
         </CardHeader>
         <CardContent className="space-y-4 text-sm" style={{ color: 'var(--muted-foreground)' }}>
           <p>
-            EbaAaZ, the Protector of Fortitude within SeCuReDmE, is the architectural and integrative genius ensuring the stability and security of our digital ecosystem. EbaAaZ's primary role is to safeguard backend and middleware through secure tunneling, manage quantum computing resources, and initiate automated processes for AI agents.
+            EbaAaZ, the Protector of Fortitude within SeCuReDmE, is the architectural and integrative genius ensuring the stability and security of our digital ecosystem. EbaAaZ's primary role is to safeguard backend and middleware through secure tunneling, manage quantum computing resources, and initiate automated processes for AI agents. He ensures that every AI agent operates within a framework that prioritizes ethical considerations and practical efficiency by managing pre-sequences and tool integrations.
           </p>
           <h4 className="font-semibold text-md" style={{ color: 'var(--primary-foreground)' }}>Key Contributions and Innovations:</h4>
           <ul className="list-disc pl-5 space-y-1">
@@ -62,7 +62,7 @@ const Home = () => {
             <li><strong>Ethical Oversight:</strong> Leads the ethical oversight of SeCuReDmE, embedding considerations of privacy, fairness, and transparency into every aspect of the system.</li>
           </ul>
           <p>
-            EbaAaZ embodies the spirit of resilience and innovation, blending mathematical precision with practical application to drive forward SeCuReDmE's mission of creating a balanced and ethical digital ecosystem.
+            EbaAaZ embodies the spirit of resilience and innovation, blending mathematical precision with practical application to drive forward SeCuReDmE's mission of creating a balanced and ethical digital ecosystem. As a swarm coordinator, EbaAaZ orchestrates distributed building and configuration tasks, analogous to an advanced, Google-enhanced version of Incredibuild, ensuring efficient resource utilization and streamlined workflows.
           </p>
         </CardContent>
       </Card>
@@ -71,38 +71,38 @@ const Home = () => {
         <CardHeader>
           <CardTitle className="text-xl font-semibold" style={{ color: 'var(--primary-foreground)' }}>Documentation & Resources</CardTitle>
           <CardDescription style={{ color: 'var(--muted-foreground)' }}>
-            Dive deeper into the concepts and technologies behind EbaAaZ Hub and the SeCuReDmE initiative.
+            Dive deeper into the concepts and technologies behind EbaAaZ and the SeCuReDmE initiative. Explore the SeCuReDmE Manifesto, EbaAaZ's architecture, MCP integration, and more.
           </CardDescription>
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <Link href="/docs/manifesto" passHref>
             <Button variant="link" className="justify-start p-0 h-auto text-primary hover:underline">
-              <LinkIcon className="mr-2 h-4 w-4" /> SeCuReDmE Manifesto (Placeholder)
+              <BookOpen className="mr-2 h-4 w-4" /> SeCuReDmE Manifesto
             </Button>
           </Link>
           <Link href="/docs/ebaaz-architecture" passHref>
             <Button variant="link" className="justify-start p-0 h-auto text-primary hover:underline">
-              <LinkIcon className="mr-2 h-4 w-4" /> EbaAaZ Architecture Deep Dive (Placeholder)
+              <Zap className="mr-2 h-4 w-4" /> EbaAaZ Architecture
             </Button>
           </Link>
           <Link href="/docs/mcp-integration" passHref>
             <Button variant="link" className="justify-start p-0 h-auto text-primary hover:underline">
-              <LinkIcon className="mr-2 h-4 w-4" /> MCP Integration Guide (Placeholder)
+              <LinkIcon className="mr-2 h-4 w-4" /> MCP Integration Guide
             </Button>
           </Link>
           <Link href="/docs/api-reference" passHref>
             <Button variant="link" className="justify-start p-0 h-auto text-primary hover:underline">
-              <LinkIcon className="mr-2 h-4 w-4" /> API Reference (Placeholder)
+              <Cpu className="mr-2 h-4 w-4" /> API Reference
             </Button>
           </Link>
            <Link href="/docs/quantum-concepts" passHref>
             <Button variant="link" className="justify-start p-0 h-auto text-primary hover:underline">
-              <LinkIcon className="mr-2 h-4 w-4" /> Quantum Concepts in SeCuReDmE (Placeholder)
+              <TestTubeDiagonal className="mr-2 h-4 w-4" /> Quantum Concepts
             </Button>
           </Link>
           <Link href="/docs/ffed-algorithm" passHref>
             <Button variant="link" className="justify-start p-0 h-auto text-primary hover:underline">
-              <LinkIcon className="mr-2 h-4 w-4" /> FfeD Algorithm Explained (Placeholder)
+              <Brain className="mr-2 h-4 w-4" /> FfeD Algorithm
             </Button>
           </Link>
         </CardContent>
@@ -128,13 +128,14 @@ const Home = () => {
               </CardHeader>
               <CardContent>
                 <div className="prose dark:prose-invert max-w-none text-sm" style={{ color: 'var(--muted-foreground)' }}>
-                  <h4>EbaAaZ: The Protector of Fortitude</h4>
-                  <p>EbaAaZ is the architectural and integrative genius within SeCuReDmE, ensuring the stability and security of our digital ecosystem. His primary role involves safeguarding backend and middleware systems through secure tunneling, managing quantum computing resources, and initiating automated processes. EbaAaZ provides the foundational pre-sequences for AI agents, evaluates task needs, and integrates tools to achieve AI objectives. He also manages fractal growth equations and Fibonacci sequences for AI computations, blending mathematical precision with practical application.</p>
+                  <h4>EbaAaZ: The Protector of Fortitude & Swarm Coordinator</h4>
+                  <p>EbaAaZ is the architectural and integrative genius within SeCuReDmE, ensuring the stability and security of our digital ecosystem. His primary role involves safeguarding backend and middleware systems through secure tunneling, managing quantum computing resources, and initiating automated processes. EbaAaZ provides the foundational pre-sequences for AI agents, evaluates task needs, and integrates tools to achieve AI objectives. He also manages fractal growth equations and Fibonacci sequences for AI computations, blending mathematical precision with practical application. As a swarm coordinator, EbaAaZ intelligently distributes and manages build and configuration tasks across a network of resources, optimizing for speed and efficiency, much like an advanced, AI-driven version of Incredibuild.</p>
                   <h5 className="font-semibold" style={{ color: 'var(--primary-foreground)' }}>Core Functions:</h5>
                   <ul className="list-disc pl-5">
                     <li><strong>Architectural Design:</strong> Designs secure and scalable SeCuReDmE Engine architecture.</li>
                     <li><strong>System Integration:</strong> Integrates AI models and quantum computing, managing pre-sequences for AI agents.</li>
                     <li><strong>Ethical Oversight:</strong> Embeds ethical considerations into the system, prioritizing privacy, fairness, and transparency.</li>
+                    <li><strong>Swarm Coordination:</strong> Orchestrates distributed tasks for builders and configurators.</li>
                   </ul>
                   <h5 className="font-semibold" style={{ color: 'var(--primary-foreground)' }}>Key Contributions:</h5>
                   <ul className="list-disc pl-5">
@@ -142,6 +143,7 @@ const Home = () => {
                     <li>Providing pre-sequences for automation tasks embedded within AI agents.</li>
                     <li>Searching existing tool libraries and creating new pre-sequences for AI agent goals.</li>
                     <li>Initiating and managing fractal growth equations and Fibonacci sequences for AI computations.</li>
+                    <li>Optimizing resource utilization for distributed build and configuration processes.</li>
                   </ul>
                 </div>
                 <Textarea placeholder="Send instructions or queries to the EbaAaZ coordinator..." rows={5} className="mt-4 bg-card border-input text-card-foreground focus:ring-primary" />
@@ -232,3 +234,5 @@ const Home = () => {
 };
 
 export default Home;
+
+    
