@@ -89,4 +89,4 @@ We would like to thank all the contributors and third-party resources that have 
 
 ## Contact Information
 
-For support or inquiries, please contact us at [support@ebaaaz.com](mailto:support@ebaaaz.com).
+For support or inquiries, please contact us at [SeCuReDmE-Dev@neural-fluwheel.com](mailto: SeCuReDmE-Dev@neural-fluwheel.com).
