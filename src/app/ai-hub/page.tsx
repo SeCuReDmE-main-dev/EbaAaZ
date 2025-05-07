@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { MessageSquare, BookOpen, Settings, FileCog, UploadCloud, Play, Save, UserCircle, Bell } from "lucide-react";
 import { EbaazChatSpace } from '@/components/ebaaz-chat-space';
 import { useToast } from "@/hooks/use-toast";
+import UserFeedback from '@/components/user-feedback';
 
 const AIHubPage = () => {
   const [showEbaazChat, setShowEbaazChat] = useState(false);
@@ -376,6 +377,9 @@ const AIHubPage = () => {
           {/* Add your Google Lab anchor settings here */}
         </CardContent>
       </Card>
+
+      {/* User Feedback Section */}
+      <UserFeedback />
 
     </div>
   );
