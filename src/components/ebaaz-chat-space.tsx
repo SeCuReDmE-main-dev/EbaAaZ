@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useRef, useEffect, FormEvent } from 'react';
@@ -6,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { X, Send, Bot, User, Loader2 } from 'lucide-react';
+import { X, Send, Bot, User, Loader2, File, Mic, MicOff, Settings, Star, Globe, MessageCircle, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { generateEbaazChatResponse, type EbaazChatInput } from '@/ai/flows/ebaaz-chat-flow';
 
@@ -26,6 +25,9 @@ export const EbaazChatSpace: React.FC<EbaazChatSpaceProps> = ({ onClose, context
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isVoiceInput, setIsVoiceInput] = useState(false);
+  const [isDarkTheme, setIsDarkTheme] = useState(true);
+  const [feedback, setFeedback] = useState<{ [key: string]: 'up' | 'down' | null }>({});
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -94,17 +96,40 @@ export const EbaazChatSpace: React.FC<EbaazChatSpaceProps> = ({ onClose, context
     }
   };
 
+  const handleVoiceInputToggle = () => {
+    setIsVoiceInput(!isVoiceInput);
+  };
+
+  const handleThemeToggle = () => {
+    setIsDarkTheme(!isDarkTheme);
+  };
+
+  const handleFeedback = (messageId: string, type: 'up' | 'down') => {
+    setFeedback((prevFeedback) => ({
+      ...prevFeedback,
+      [messageId]: type,
+    }));
+  };
+
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 page-fade-in">
-      <Card className="w-full max-w-2xl h-[80vh] flex flex-col shadow-2xl border-primary text-center">
+    <div className={`fixed inset-0 ${isDarkTheme ? 'bg-black/50' : 'bg-white/50'} backdrop-blur-sm flex items-center justify-center z-50 p-4 page-fade-in`}>
+      <Card className={`w-full max-w-2xl h-[80vh] flex flex-col shadow-2xl ${isDarkTheme ? 'border-primary' : 'border-secondary'} text-center`}>
         <CardHeader className="flex flex-row items-center justify-between p-4 border-b">
           <CardTitle className="text-lg font-semibold flex items-center text-center w-full justify-center">
             <Bot className="mr-2 h-6 w-6 text-primary" />
             EbaAaZ Chat
           </CardTitle>
-          <Button variant="ghost" size="icon" onClick={onClose} aria-label="Close chat" className="absolute right-4 top-4">
-            <X className="h-5 w-5" />
-          </Button>
+          <div className="flex items-center space-x-2">
+            <Button variant="ghost" size="icon" onClick={handleVoiceInputToggle} aria-label="Toggle voice input">
+              {isVoiceInput ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
+            </Button>
+            <Button variant="ghost" size="icon" onClick={handleThemeToggle} aria-label="Toggle theme">
+              <Settings className="h-5 w-5" />
+            </Button>
+            <Button variant="ghost" size="icon" onClick={onClose} aria-label="Close chat">
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
         </CardHeader>
         <CardContent className="flex-grow p-0 overflow-hidden">
           <ScrollArea className="h-full p-4" ref={scrollAreaRef}>
@@ -131,6 +156,16 @@ export const EbaazChatSpace: React.FC<EbaazChatSpaceProps> = ({ onClose, context
                     <p className="text-xs opacity-70 mt-1 text-right">
                       {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
+                    {msg.sender === 'bot' && (
+                      <div className="flex justify-end space-x-1 mt-1">
+                        <Button variant="ghost" size="icon" onClick={() => handleFeedback(msg.id, 'up')} aria-label="Thumbs up">
+                          <ThumbsUp className={`h-4 w-4 ${feedback[msg.id] === 'up' ? 'text-green-500' : 'text-muted-foreground'}`} />
+                        </Button>
+                        <Button variant="ghost" size="icon" onClick={() => handleFeedback(msg.id, 'down')} aria-label="Thumbs down">
+                          <ThumbsDown className={`h-4 w-4 ${feedback[msg.id] === 'down' ? 'text-red-500' : 'text-muted-foreground'}`} />
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}

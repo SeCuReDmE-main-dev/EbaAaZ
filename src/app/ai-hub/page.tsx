@@ -10,13 +10,12 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MessageSquare, BookOpen, Settings, FileCog, UploadCloud, Play, Save, UserCircle, Bell } from "lucide-react";
-import { EbaazChatSpace } from '@/components/ebaaz-chat-space'; // Changed import
+import { EbaazChatSpace } from '@/components/ebaaz-chat-space';
 import { useToast } from "@/hooks/use-toast";
 
-
-const HumanHubPage = () => {
-  const [showEbaazChat, setShowEbaazChat] = useState(false); // Renamed state
-  const [chatContext, setChatContext] = useState<string | undefined>(undefined); // New state for chat context
+const AIHubPage = () => {
+  const [showEbaazChat, setShowEbaazChat] = useState(false);
+  const [chatContext, setChatContext] = useState<string | undefined>(undefined);
   const { toast } = useToast();
   const [displayName, setDisplayName] = useState("EbaAaZ User");
   const [darkMode, setDarkMode] = useState(true);
@@ -48,7 +47,7 @@ const HumanHubPage = () => {
   const handleGraftFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      if (file.name.endsWith(".yml") || file.name.endsWith(".yaml") || file.name.endsWith(".mindmap") || file.name.endsWith(".classgrafth") || file.name.endsWith(".css") || file.name.endsWith(".html")) {
+      if (file.name.endsWith(".yml") || file.name.endsWith(".yaml")) {
         setGraftFile(file);
         setGraftFileName(file.name);
         toast({
@@ -60,7 +59,7 @@ const HumanHubPage = () => {
         setGraftFileName("");
         toast({
           title: "Invalid File Type",
-          description: "Please select a .yml, .yaml, .mindmap, .classgrafth, .css, or .html file.",
+          description: "Please select a .yml or .yaml file.",
           variant: "destructive",
         });
       }
@@ -109,7 +108,7 @@ const HumanHubPage = () => {
 
   const handleOpenEbaazChat = () => {
     const currentSettingsSummary = `Display Name: ${displayName}, Dark Mode: ${darkMode}, Workers: ${numWorkers}, Logging: ${advancedLogging}, Notifications: ${emailNotifications} via ${notificationChannel}. Graft File: ${graftFileName || 'None'}.`;
-    const context = `User is on the EbaAaZ Human Hub page.
+    const context = `User is on the EbaAaZ AI Hub page.
     Project: EbaAaZ - The Protector of Fortitude, an application for configuration and integration hub powered by SeCuReDmE.
     Current User: ${displayName}
     Current Page Configurations: ${currentSettingsSummary}
@@ -121,13 +120,13 @@ const HumanHubPage = () => {
   return (
     <div className="container mx-auto p-4 flex flex-col items-center gap-6 page-fade-in text-center">
        <h1 className="text-4xl font-bold mb-6" style={{ color: 'var(--primary)' }}>
-         EbaAaZ Human Hub
+         EbaAaZ AI Hub
       </h1>
 
       <Card className="w-full max-w-3xl shadow-lg border-primary text-center">
         <CardHeader>
           <CardTitle className="text-2xl font-semibold" style={{ color: 'var(--primary-foreground)' }}>
-            Welcome to the Human Hub
+            Welcome to the AI Hub
           </CardTitle>
           <CardDescription style={{ color: 'var(--muted-foreground)' }}>
             Configure your EbaAaZ experience, manage swarm settings, and define role-based permissions.
@@ -164,7 +163,7 @@ const HumanHubPage = () => {
             Configure Your EbaAaZ Experience
           </CardTitle>
           <CardDescription style={{ color: 'var(--muted-foreground)' }} className="text-center">
-            Manage your preferences for the EbaAaZ Human Hub and swarm coordination.
+            Manage your preferences for the EbaAaZ AI Hub and swarm coordination.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-8">
@@ -265,12 +264,12 @@ const HumanHubPage = () => {
             <div className="space-y-4">
               <div>
                 <Label htmlFor="graftFileInput" className="text-sm font-medium text-left block mb-1">
-                  Upload Graft File (.yml, .yaml, .mindmap, .classgrafth, .css, .html)
+                  Upload Graft File (.yml, .yaml)
                 </Label>
                 <Input
                   id="graftFileInput"
                   type="file"
-                  accept=".yml,.yaml,.mindmap,.classgrafth,.css,.html"
+                  accept=".yml,.yaml"
                   onChange={handleGraftFileChange}
                   className="bg-card border-input text-card-foreground focus:ring-primary file:text-primary file:font-semibold"
                 />
@@ -303,48 +302,78 @@ const HumanHubPage = () => {
         </CardContent>
       </Card>
 
-      {/* Administration Section */}
+      {/* Persona Configuration Section */}
       <Card className="w-full max-w-3xl mx-auto shadow-lg border-primary text-left mt-8">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-semibold" style={{ color: 'var(--primary-foreground)' }}>
-            Administration
+            Persona Configuration
           </CardTitle>
           <CardDescription style={{ color: 'var(--muted-foreground)' }} className="text-center">
-            Manage administrative settings for EbaAaZ.
+            Manage persona settings for EbaAaZ.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-8">
-          {/* Add your administration settings here */}
+          {/* Add your persona configuration settings here */}
         </CardContent>
       </Card>
 
-      {/* Subscription Section */}
+      {/* Class Configuration Section */}
       <Card className="w-full max-w-3xl mx-auto shadow-lg border-primary text-left mt-8">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-semibold" style={{ color: 'var(--primary-foreground)' }}>
-            Subscription
+            Class Configuration
           </CardTitle>
           <CardDescription style={{ color: 'var(--muted-foreground)' }} className="text-center">
-            Manage your subscription settings for EbaAaZ.
+            Manage class settings for EbaAaZ.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-8">
-          {/* Add your subscription settings here */}
+          {/* Add your class configuration settings here */}
         </CardContent>
       </Card>
 
-      {/* Permission Section */}
+      {/* Third-Party Configuration Section */}
       <Card className="w-full max-w-3xl mx-auto shadow-lg border-primary text-left mt-8">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-semibold" style={{ color: 'var(--primary-foreground)' }}>
-            Permission
+            Third-Party Configuration
           </CardTitle>
           <CardDescription style={{ color: 'var(--muted-foreground)' }} className="text-center">
-            Manage permission settings for EbaAaZ.
+            Manage third-party settings for EbaAaZ.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-8">
-          {/* Add your permission settings here */}
+          {/* Add your third-party configuration settings here */}
+        </CardContent>
+      </Card>
+
+      {/* Google Drive Tool Connection Section */}
+      <Card className="w-full max-w-3xl mx-auto shadow-lg border-primary text-left mt-8">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl font-semibold" style={{ color: 'var(--primary-foreground)' }}>
+            Google Drive Tool Connection
+          </CardTitle>
+          <CardDescription style={{ color: 'var(--muted-foreground)' }} className="text-center">
+            Manage Google Drive tool connections for EbaAaZ.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-8">
+          {/* Add your Google Drive tool connection settings here */}
+        </CardContent>
+      </Card>
+
+      {/* Google Lab Anchor Section */}
+      <Card className="w-full max-w-3xl mx-auto shadow-lg border-primary text-left mt-8">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl font-semibold" style={{ color: 'var(--primary-foreground)' }}>
+            Google Lab Anchor
+          </CardTitle>
+          <CardDescription style={{ color: 'var(--muted-foreground)' }} className="text-center">
+            Manage Google Lab anchor settings for EbaAaZ.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-8">
+          {/* Add your Google Lab anchor settings here */}
         </CardContent>
       </Card>
 
@@ -352,4 +381,4 @@ const HumanHubPage = () => {
   );
 };
 
-export default HumanHubPage;
+export default AIHubPage;
