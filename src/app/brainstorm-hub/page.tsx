@@ -10,13 +10,12 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MessageSquare, BookOpen, Settings, FileCog, UploadCloud, Play, Save, UserCircle, Bell } from "lucide-react";
-import { EbaazChatSpace } from '@/components/ebaaz-chat-space'; // Changed import
+import { EbaazChatSpace } from '@/components/ebaaz-chat-space';
 import { useToast } from "@/hooks/use-toast";
 
-
-const HumanHubPage = () => {
-  const [showEbaazChat, setShowEbaazChat] = useState(false); // Renamed state
-  const [chatContext, setChatContext] = useState<string | undefined>(undefined); // New state for chat context
+const BrainstormHubPage = () => {
+  const [showEbaazChat, setShowEbaazChat] = useState(false);
+  const [chatContext, setChatContext] = useState<string | undefined>(undefined);
   const { toast } = useToast();
   const [displayName, setDisplayName] = useState("EbaAaZ User");
   const [darkMode, setDarkMode] = useState(true);
@@ -25,9 +24,9 @@ const HumanHubPage = () => {
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [notificationChannel, setNotificationChannel] = useState("email");
 
-  const [graftFile, setGraftFile] = useState<File | null>(null);
-  const [graftFileName, setGraftFileName] = useState<string>("");
-  const [isProcessingGraft, setIsProcessingGraft] = useState<boolean>(false);
+  const [documentFile, setDocumentFile] = useState<File | null>(null);
+  const [documentFileName, setDocumentFileName] = useState<string>("");
+  const [isProcessingDocument, setIsProcessingDocument] = useState<boolean>(false);
 
   const handleSaveChanges = () => {
     console.log("Settings saved:", {
@@ -45,75 +44,75 @@ const HumanHubPage = () => {
     });
   };
 
-  const handleGraftFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleDocumentFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      if (file.name.endsWith(".yml") || file.name.endsWith(".yaml") || file.name.endsWith(".mindmap") || file.name.endsWith(".classgrafth") || file.name.endsWith(".css") || file.name.endsWith(".html")) {
-        setGraftFile(file);
-        setGraftFileName(file.name);
+      if (file.name.endsWith(".pdf") || file.name.endsWith(".txt") || file.name.endsWith(".json")) {
+        setDocumentFile(file);
+        setDocumentFileName(file.name);
         toast({
           title: "File Selected",
           description: `${file.name} is ready to be processed.`,
         });
       } else {
-        setGraftFile(null);
-        setGraftFileName("");
+        setDocumentFile(null);
+        setDocumentFileName("");
         toast({
           title: "Invalid File Type",
-          description: "Please select a .yml, .yaml, .mindmap, .classgrafth, .css, or .html file.",
+          description: "Please select a .pdf, .txt, or .json file.",
           variant: "destructive",
         });
       }
     }
   };
 
-  const handleProcessGraftFile = async () => {
-    if (!graftFile) {
+  const handleProcessDocumentFile = async () => {
+    if (!documentFile) {
       toast({
         title: "No File Selected",
-        description: "Please select a graft file to process.",
+        description: "Please select a document file to process.",
         variant: "destructive",
       });
       return;
     }
 
-    setIsProcessingGraft(true);
+    setIsProcessingDocument(true);
     toast({
-      title: "Processing Graft File",
-      description: `Processing ${graftFile.name}...`,
+      title: "Processing Document File",
+      description: `Processing ${documentFile.name}...`,
     });
 
     try {
       // Simulate processing
       await new Promise(resolve => setTimeout(resolve, 2000)); 
       // In a real scenario, you would call an AI flow here, e.g.:
-      // const graftContent = await graftFile.text();
-      // const result = await processGraftFlow({ graftContent }); // Assuming such a flow exists
-      // console.log("Graft processing result:", result);
+      // const documentContent = await documentFile.text();
+      // const result = await processDocumentFlow({ documentContent }); // Assuming such a flow exists
+      // console.log("Document processing result:", result);
       toast({
-        title: "Graft File Processed",
-        description: `${graftFile.name} has been processed successfully. (Simulated)`,
+        title: "Document File Processed",
+        description: `${documentFile.name} has been processed successfully. (Simulated)`,
         variant: "default", 
       });
     } catch (error) {
-      console.error("Error processing graft file:", error);
+      console.error("Error processing document file:", error);
       toast({
-        title: "Error Processing Graft File",
-        description: `An error occurred while processing ${graftFile.name}. Check console for details.`,
+        title: "Error Processing Document File",
+        description: `An error occurred while processing ${documentFile.name}. Check console for details.`,
         variant: "destructive",
       });
     } finally {
-      setIsProcessingGraft(false);
+      setIsProcessingDocument(false);
     }
   };
 
   const handleOpenEbaazChat = () => {
-    const currentSettingsSummary = `Display Name: ${displayName}, Dark Mode: ${darkMode}, Workers: ${numWorkers}, Logging: ${advancedLogging}, Notifications: ${emailNotifications} via ${notificationChannel}. Graft File: ${graftFileName || 'None'}.`;
-    const context = `User is on the EbaAaZ Human Hub page.
+    const currentSettingsSummary = `Display Name: ${displayName}, Dark Mode: ${darkMode}, Workers: ${numWorkers}, Logging: ${advancedLogging}, Notifications: ${emailNotifications} via ${notificationChannel}. Document File: ${documentFileName || 'None'}.`;
+    const context = `User is on the EbaAaZ Brainstorm Hub page.
     Project: EbaAaZ - The Protector of Fortitude, an application for configuration and integration hub powered by SeCuReDmE.
     Current User: ${displayName}
     Current Page Configurations: ${currentSettingsSummary}
-    The user is configuring their EbaAaZ experience, including user profile, swarm configuration, notification settings, and role/permission graft configurations.`;
+    The user is configuring their EbaAaZ experience, including user profile, swarm configuration, notification settings, and document loading.`;
     setChatContext(context);
     setShowEbaazChat(true);
   };
@@ -121,13 +120,13 @@ const HumanHubPage = () => {
   return (
     <div className="container mx-auto p-4 flex flex-col items-center gap-6 page-fade-in text-center">
        <h1 className="text-4xl font-bold mb-6" style={{ color: 'var(--primary)' }}>
-         EbaAaZ Human Hub
+         EbaAaZ Brainstorm Hub
       </h1>
 
       <Card className="w-full max-w-3xl shadow-lg border-primary text-center">
         <CardHeader>
           <CardTitle className="text-2xl font-semibold" style={{ color: 'var(--primary-foreground)' }}>
-            Welcome to the Human Hub
+            Welcome to the Brainstorm Hub
           </CardTitle>
           <CardDescription style={{ color: 'var(--muted-foreground)' }}>
             Configure your EbaAaZ experience, manage swarm settings, and define role-based permissions.
@@ -136,7 +135,7 @@ const HumanHubPage = () => {
         <CardContent className="space-y-4 text-sm" style={{ color: 'var(--muted-foreground)' }}>
           <p>
             This is your central space for tailoring EbaAaZ to your needs. Adjust your profile, set up notification preferences,
-            configure how the AI swarm operates, and manage access control through graft files.
+            configure how the AI swarm operates, and manage access control through document files.
           </p>
         </CardContent>
       </Card>
@@ -164,7 +163,7 @@ const HumanHubPage = () => {
             Configure Your EbaAaZ Experience
           </CardTitle>
           <CardDescription style={{ color: 'var(--muted-foreground)' }} className="text-center">
-            Manage your preferences for the EbaAaZ Human Hub and swarm coordination.
+            Manage your preferences for the EbaAaZ Brainstorm Hub and swarm coordination.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-8">
@@ -257,39 +256,39 @@ const HumanHubPage = () => {
             </div>
           </section>
 
-          {/* Role & Permission Graft Configuration */}
+          {/* Document Loading */}
           <section>
             <h3 className="text-xl font-semibold mb-4 flex items-center justify-center" style={{ color: 'var(--secondary-foreground)' }}>
-              <FileCog className="mr-2 h-6 w-6" /> Role & Permission Graft Configuration
+              <FileCog className="mr-2 h-6 w-6" /> Document Loading
             </h3>
             <div className="space-y-4">
               <div>
-                <Label htmlFor="graftFileInput" className="text-sm font-medium text-left block mb-1">
-                  Upload Graft File (.yml, .yaml, .mindmap, .classgrafth, .css, .html)
+                <Label htmlFor="documentFileInput" className="text-sm font-medium text-left block mb-1">
+                  Upload Document File (.pdf, .txt, .json)
                 </Label>
                 <Input
-                  id="graftFileInput"
+                  id="documentFileInput"
                   type="file"
-                  accept=".yml,.yaml,.mindmap,.classgrafth,.css,.html"
-                  onChange={handleGraftFileChange}
+                  accept=".pdf,.txt,.json"
+                  onChange={handleDocumentFileChange}
                   className="bg-card border-input text-card-foreground focus:ring-primary file:text-primary file:font-semibold"
                 />
-                {graftFileName && (
-                  <p className="text-sm text-muted-foreground mt-2 text-center">Selected file: {graftFileName}</p>
+                {documentFileName && (
+                  <p className="text-sm text-muted-foreground mt-2 text-center">Selected file: {documentFileName}</p>
                 )}
               </div>
               <div className="flex justify-center">
                 <Button 
-                  onClick={handleProcessGraftFile} 
-                  disabled={!graftFile || isProcessingGraft}
+                  onClick={handleProcessDocumentFile} 
+                  disabled={!documentFile || isProcessingDocument}
                   className="bg-accent hover:bg-accent/90 text-accent-foreground"
                 >
-                  {isProcessingGraft ? (
+                  {isProcessingDocument ? (
                     <UploadCloud className="mr-2 h-5 w-5 animate-pulse" />
                   ) : (
                     <Play className="mr-2 h-5 w-5" />
                   )}
-                  {isProcessingGraft ? "Processing..." : "Process Graft File"}
+                  {isProcessingDocument ? "Processing..." : "Process Document File"}
                 </Button>
               </div>
             </div>
@@ -303,48 +302,93 @@ const HumanHubPage = () => {
         </CardContent>
       </Card>
 
-      {/* Administration Section */}
+      {/* Workbook Interface Section */}
       <Card className="w-full max-w-3xl mx-auto shadow-lg border-primary text-left mt-8">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-semibold" style={{ color: 'var(--primary-foreground)' }}>
-            Administration
+            Workbook Interface
           </CardTitle>
           <CardDescription style={{ color: 'var(--muted-foreground)' }} className="text-center">
-            Manage administrative settings for EbaAaZ.
+            Manage workbook interface settings for EbaAaZ.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-8">
-          {/* Add your administration settings here */}
+          {/* Add your workbook interface settings here */}
         </CardContent>
       </Card>
 
-      {/* Subscription Section */}
+      {/* Public Website URL Loading Section */}
       <Card className="w-full max-w-3xl mx-auto shadow-lg border-primary text-left mt-8">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-semibold" style={{ color: 'var(--primary-foreground)' }}>
-            Subscription
+            Public Website URL Loading
           </CardTitle>
           <CardDescription style={{ color: 'var(--muted-foreground)' }} className="text-center">
-            Manage your subscription settings for EbaAaZ.
+            Manage public website URL loading settings for EbaAaZ.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-8">
-          {/* Add your subscription settings here */}
+          {/* Add your public website URL loading settings here */}
         </CardContent>
       </Card>
 
-      {/* Permission Section */}
+      {/* Google Drive Section */}
       <Card className="w-full max-w-3xl mx-auto shadow-lg border-primary text-left mt-8">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-semibold" style={{ color: 'var(--primary-foreground)' }}>
-            Permission
+            Google Drive
           </CardTitle>
           <CardDescription style={{ color: 'var(--muted-foreground)' }} className="text-center">
-            Manage permission settings for EbaAaZ.
+            Manage Google Drive settings for EbaAaZ.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-8">
-          {/* Add your permission settings here */}
+          {/* Add your Google Drive settings here */}
+        </CardContent>
+      </Card>
+
+      {/* Microsoft Cloud Section */}
+      <Card className="w-full max-w-3xl mx-auto shadow-lg border-primary text-left mt-8">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl font-semibold" style={{ color: 'var(--primary-foreground)' }}>
+            Microsoft Cloud
+          </CardTitle>
+          <CardDescription style={{ color: 'var(--muted-foreground)' }} className="text-center">
+            Manage Microsoft Cloud settings for EbaAaZ.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-8">
+          {/* Add your Microsoft Cloud settings here */}
+        </CardContent>
+      </Card>
+
+      {/* Brainstorming with EbaAaZ Section */}
+      <Card className="w-full max-w-3xl mx-auto shadow-lg border-primary text-left mt-8">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl font-semibold" style={{ color: 'var(--primary-foreground)' }}>
+            Brainstorming with EbaAaZ
+          </CardTitle>
+          <CardDescription style={{ color: 'var(--muted-foreground)' }} className="text-center">
+            Manage brainstorming settings for EbaAaZ.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-8">
+          {/* Add your brainstorming settings here */}
+        </CardContent>
+      </Card>
+
+      {/* Podcast Creation Section */}
+      <Card className="w-full max-w-3xl mx-auto shadow-lg border-primary text-left mt-8">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl font-semibold" style={{ color: 'var(--primary-foreground)' }}>
+            Podcast Creation
+          </CardTitle>
+          <CardDescription style={{ color: 'var(--muted-foreground)' }} className="text-center">
+            Manage podcast creation settings for EbaAaZ.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-8">
+          {/* Add your podcast creation settings here */}
         </CardContent>
       </Card>
 
@@ -352,4 +396,4 @@ const HumanHubPage = () => {
   );
 };
 
-export default HumanHubPage;
+export default BrainstormHubPage;
