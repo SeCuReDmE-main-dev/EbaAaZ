@@ -15,6 +15,14 @@ EbaAaZ is a configuration and integration hub powered by the SeCuReDmE framework
 - **MiddleWrecks**: Middle wrecks of the coordinator manipulate Google ADK and build AUTOGEN bot to preassemble the code logic.
 - **Fluffer Front-End**: Allows users to drag and drop, slide, edit, move, and combine UI elements.
 
+## Firestore Integration
+
+Yes, Firestore is being used with the Firebase project for EbaAaZ. The `firebase` package is listed as a dependency in the `package.json` file, indicating Firestore usage. The `.gitignore` file includes entries for Firebase-related directories and files, suggesting Firestore integration. Various files such as `src/app/ai-hub/page.tsx` and `src/components/ebaaz-chat-space.tsx` mention user settings, graft files, document files, chat history, data analysis results, automated process details, and security alerts being stored in Firestore.
+
+## MS Access Database Access
+
+EbaAaZ accesses MS Access databases as part of its data analytics capabilities, as described in `docs/blueprint.md`. However, there is no explicit configuration or code for accessing MS Access databases from a Next.js/Genkit backend found in the provided files.
+
 ## New Hubs
 
 ### Data Analytics Hub

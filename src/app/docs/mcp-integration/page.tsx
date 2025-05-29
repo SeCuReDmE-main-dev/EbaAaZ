@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -97,6 +96,22 @@ const McpIntegrationPage = () => {
                 <li><strong>Token Security:</strong> Sensitive tokens should always be handled securely. EbaAaZ Hub uses local hashing for UI-entered tokens and supports environment variables. For production, more robust secret management solutions are recommended.</li>
                 <li><strong>Trusted MCP Sources:</strong> Only integrate MCP servers from trusted and verified sources to prevent security vulnerabilities.</li>
                 <li><strong>Permissions/Scopes:</strong> When generating tokens (e.g., GitHub PATs), grant only the necessary permissions/scopes required by the MCP to perform its intended functions.</li>
+              </ul>
+            </section>
+
+            <section className="mb-6">
+              <h2 className="text-xl font-semibold mb-2 text-center" style={{ color: 'var(--primary)' }}>MCP Framework Configuration for Genkit/Next.js Environment</h2>
+              <p>
+                The MCP framework configures the Genkit/Next.js environment in the EbaAaZ project through several key components and configurations:
+              </p>
+              <ul className="list-disc pl-5 space-y-1 my-2">
+                <li><strong>Dependencies:</strong> The <code>package.json</code> file includes dependencies such as <code>genkit</code>, <code>@genkit-ai/googleai</code>, and <code>@genkit-ai/next</code>, which are essential for integrating Genkit and Next.js with the MCP framework.</li>
+                <li><strong>AI Instance Setup:</strong> The <code>src/ai/ai-instance.ts</code> file sets up the AI instance using <code>genkit</code> and <code>googleAI</code>, specifying the model and API key for the Gemini model.</li>
+                <li><strong>AI Flows:</strong> The <code>src/ai/dev.ts</code> file imports various AI flows, including <code>graft-to-code-conversion.ts</code>, <code>ebaaz-chat-flow.ts</code>, and <code>data-analytics.ts</code>, which are part of the MCP framework's configuration.</li>
+                <li><strong>Integration Guide:</strong> This file, <code>src/app/docs/mcp-integration/page.tsx</code>, provides a detailed guide on integrating MCP servers, including token management, server activation, and fetching MCP options.</li>
+                <li><strong>Development Environment:</strong> The <code>.idx/dev.nix</code> file configures the development environment using Nix, specifying packages, environment variables, and workspace settings.</li>
+                <li><strong>Gemini API Integration:</strong> The <code>.idx/integrations.json</code> file includes an entry for <code>gemini_api</code>, indicating the integration of the Gemini model with the MCP framework.</li>
+                <li><strong>Core Features:</strong> The <code>README.md</code> file outlines the core features of EbaAaZ, including the integration of MCP servers and the use of Genkit for code generation and AI capabilities.</li>
               </ul>
             </section>
 
